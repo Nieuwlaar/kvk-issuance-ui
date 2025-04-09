@@ -82,6 +82,9 @@
 import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import NavigationBar from '@/components/NavigationBar.vue'
+import TheKrustyKrab from '@/img/TheKrustyKrab.png'
+import DuckburgDaily from '@/img/DuckburgDaily.png'
+import HetGroteBos from '@/img/HetGroteBos.png'
 
 const { t } = useI18n()
 
@@ -93,19 +96,19 @@ const organizations = [
   {
     legal_person_name: 'The Krusty Krab',
     attestation_type: 'Power of Representation',
-    imageUrl: './src/img/TheKrustyKrab.png',
+    imageUrl: TheKrustyKrab,
     kvkNumber: '90000021',
   },
   {
     legal_person_name: 'Duckburg Daily',
     attestation_type: 'Power of Representation',
-    imageUrl: './src/img/DuckburgDaily.png',
+    imageUrl: DuckburgDaily,
     kvkNumber: '22222222',
   },
   {
     legal_person_name: 'The Great Forest',
     attestation_type: 'Power of Representation',
-    imageUrl: './src/img/HetGroteBos.png',
+    imageUrl: HetGroteBos,
     kvkNumber: '33333333',
   },
 ]
