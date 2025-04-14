@@ -99,18 +99,18 @@ const organizations = [
     imageUrl: TheKrustyKrab,
     kvkNumber: '90000021',
   },
-  {
-    legal_person_name: 'Duckburg Daily',
-    attestation_type: 'Power of Representation',
-    imageUrl: DuckburgDaily,
-    kvkNumber: '22222222',
-  },
-  {
-    legal_person_name: 'The Great Forest',
-    attestation_type: 'Power of Representation',
-    imageUrl: HetGroteBos,
-    kvkNumber: '33333333',
-  },
+  // {
+  //   legal_person_name: 'Duckburg Daily',
+  //   attestation_type: 'Power of Representation',
+  //   imageUrl: DuckburgDaily,
+  //   kvkNumber: '22222222',
+  // },
+  // {
+  //   legal_person_name: 'The Great Forest',
+  //   attestation_type: 'Power of Representation',
+  //   imageUrl: HetGroteBos,
+  //   kvkNumber: '33333333',
+  // },
 ]
 
 const fetchPowerOfRepresentation = async (org) => {
