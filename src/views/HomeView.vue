@@ -40,30 +40,58 @@
       >
         <div class="space-y-4">
           <h2 class="text-lg font-semibold">{{ org.legal_person_name }}</h2>
+          <p class="text-sm text-gray-600">KVK: {{ org.kvkNumber }}</p>
           
-          <div v-if="isLoading[org.legal_person_name]" class="flex justify-center">
+          <!-- Loading Indicator -->
+          <div v-if="isLoading[org.legal_person_name]?.mdoc || isLoading[org.legal_person_name]?.sd_jwt_vc" class="flex justify-center items-center h-48"> 
             <div class="loader"></div>
           </div>
 
+          <!-- Data Display Area -->
           <div v-else-if="currentData[org.legal_person_name]" class="space-y-4">
-            <div>
-              <h3 class="font-medium">QR Code:</h3>
-              <img :src="currentData[org.legal_person_name].qrCode" alt="QR Code" class="mt-2">
+            <!-- Format Selector -->
+            <div class="flex justify-center space-x-4 border-b pb-4 mb-4">
+              <label class="flex items-center space-x-2 cursor-pointer">
+                <input type="radio" name="format" value="sd_jwt_vc" v-model="selectedFormat" class="radio radio-primary radio-sm">
+                <span class="text-sm font-medium" :class="{'text-blue-600': selectedFormat === 'sd_jwt_vc'}">SD-JWT</span>
+              </label>
+              <label class="flex items-center space-x-2 cursor-pointer">
+                <input type="radio" name="format" value="mdoc" v-model="selectedFormat" class="radio radio-primary radio-sm">
+                <span class="text-sm font-medium" :class="{'text-blue-600': selectedFormat === 'mdoc'}">mDoc</span>
+              </label>
             </div>
-            <div>
-              <h3 class="font-medium">Transaction Code:</h3>
-              <p>{{ currentData[org.legal_person_name].transactionCode }}</p>
-            </div>
-            <!-- <div>
-              <h3 class="font-medium">Credential Offer URI:</h3>
-              <p class="break-all">{{ currentData[org.legal_person_name].credentialOfferUri }}</p>
-            </div> -->
-          </div>
 
+            <!-- Display based on selected format -->
+            <div v-if="currentData[org.legal_person_name]?.[selectedFormat]" class="space-y-4">
+              <div>
+                <h3 class="font-medium">QR Code ({{ selectedFormat === 'sd_jwt_vc' ? 'SD-JWT' : 'mDoc' }}):</h3>
+                <img :src="currentData[org.legal_person_name][selectedFormat].qrCode" alt="QR Code" class="mt-2 mx-auto" style="max-width: 200px;">
+              </div>
+              <div>
+                <h3 class="font-medium">Transaction Code:</h3>
+                <p class="text-sm text-gray-700 font-mono break-all">{{ currentData[org.legal_person_name][selectedFormat].transactionCode }}</p>
+              </div>
+               <div>
+                <h3 class="font-medium">Deep Link:</h3>
+                 <a :href="currentData[org.legal_person_name][selectedFormat].credentialOfferUri" target="_blank" class="text-sm text-blue-600 hover:underline break-all">Open Wallet</a>
+               </div>
+            </div>
+            <div v-else class="text-center text-gray-500 py-4">
+               Data for {{ selectedFormat === 'sd_jwt_vc' ? 'SD-JWT' : 'mDoc' }} format not available yet or failed to load.
+             </div>
+          </div>
+          
+          <!-- Error Display -->
           <div v-else-if="error" class="text-red-600">
             {{ error }}
           </div>
+          
+          <!-- Fallback if no data and no error -->
+          <div v-else class="text-center text-gray-500 py-4">
+             Waiting for data...
+           </div>
 
+          <!-- Close Button -->
           <div class="flex justify-end mt-4">
             <button 
               @click="closeDialog(org)"
@@ -79,7 +107,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import NavigationBar from '@/components/NavigationBar.vue'
 import TheKrustyKrab from '@/img/TheKrustyKrab.png'
@@ -91,6 +119,7 @@ const { t } = useI18n()
 const isLoading = ref({})
 const error = ref(null)
 const currentData = ref({})
+const selectedFormat = ref('sd_jwt_vc')
 
 const organizations = [
   {
@@ -113,22 +142,31 @@ const organizations = [
   // },
 ]
 
-const fetchPowerOfRepresentation = async (org) => {
-  if (isLoading.value[org.legal_person_name] || currentData.value[org.legal_person_name]) {
-    return
+const fetchPowerOfRepresentation = async (org, format = 'mdoc') => {
+  const orgKey = org.legal_person_name;
+  const loadingKey = `${orgKey}-${format}`;
+
+  if (!isLoading.value[orgKey]) {
+    isLoading.value[orgKey] = {}; // Initialize loading state for the org if it doesn't exist
+  }
+
+  if (isLoading.value[orgKey][format]) {
+    console.log(`Already fetching ${format} for ${orgKey}`);
+    return; // Don't fetch if already loading this format
   }
 
   try {
-    isLoading.value[org.legal_person_name] = true
-    error.value = null
-    
-    const powerOfRepUrl = 'https://kvk-issuance-service.nieuwlaar.com/rdw-niscy/power-of-representation'
+    isLoading.value[orgKey][format] = true; // Set loading state for this specific format
+    error.value = null // Reset global error, maybe refine later if needed
+
+    // Construct URL with format query parameter
+    const powerOfRepUrl = `https://kvk-issuance-service.nieuwlaar.com/rdw-niscy/power-of-representation?format=${format}`;
     const powerOfRepBody = {
       "legal_person_identifier": `NLNHR.${org.kvkNumber}`,
       "legal_name": org.legal_person_name
     }
-    
-    console.log('Making power of representation request with:', powerOfRepBody)
+
+    console.log(`Making power of representation request for ${format} with:`, powerOfRepBody);
     const powerOfRepResponse = await fetch(powerOfRepUrl, {
       method: 'POST',
       headers: {
@@ -137,49 +175,68 @@ const fetchPowerOfRepresentation = async (org) => {
       },
       body: JSON.stringify(powerOfRepBody)
     })
-    
-    if (!powerOfRepResponse.ok) {
-      throw new Error('Failed to submit power of representation')
-    }
-    
-    const data = await powerOfRepResponse.json()
-    console.log('Received power of representation data:', data)
 
-    // Store the response data for this organization
-    currentData.value[org.legal_person_name] = {
+    if (!powerOfRepResponse.ok) {
+      const errorBody = await powerOfRepResponse.text();
+      console.error(`Failed to submit power of representation for ${format}: ${powerOfRepResponse.status}`, errorBody);
+      throw new Error(`Failed to submit power of representation for ${format}`);
+    }
+
+    const data = await powerOfRepResponse.json()
+    console.log(`Received power of representation data for ${format}:`, data)
+
+    // Ensure the structure for the organization exists
+    if (!currentData.value[orgKey]) {
+      currentData.value[orgKey] = {};
+    }
+
+    // Store the response data under the specific format key
+    currentData.value[orgKey][format] = {
       qrCode: data.data.qr_code,
       transactionCode: data.data.transaction_code,
       credentialOfferUri: data.data.eudiw_link
-    }
+    };
 
-  } catch (error) {
-    console.error('Error fetching credentials:', error)
-    error.value = 'Failed to fetch credentials. Please try again.'
+  } catch (err) { // Use different variable name to avoid shadowing
+    console.error(`Error fetching ${format} credentials for ${orgKey}:`, err);
+    // Consider more granular error handling, e.g., storing error per org/format
+    error.value = `Failed to fetch ${format} credentials for ${orgKey}. Please try again.`;
   } finally {
-    isLoading.value[org.legal_person_name] = false
+    if (isLoading.value[orgKey]) {
+       isLoading.value[orgKey][format] = false; // Reset loading state for this format
+    }
   }
 }
 
 const prefetchAllData = () => {
-  // Launch all fetches in parallel
   organizations.forEach(org => {
-    if (!currentData.value[org.legal_person_name]) {
-      fetchPowerOfRepresentation(org)
+    const orgKey = org.legal_person_name;
+    // Check if data for *both* formats is missing before fetching
+    if (!currentData.value[orgKey] || !currentData.value[orgKey].mdoc || !currentData.value[orgKey].sd_jwt_vc) {
+      fetchPowerOfRepresentation(org, 'mdoc');
+      fetchPowerOfRepresentation(org, 'sd_jwt_vc');
     }
-  })
-}
+  });
+};
 
 onMounted(() => {
   prefetchAllData()
 })
 
 const openDialog = (org) => {
+  selectedFormat.value = 'sd_jwt_vc'; // Reset to default when opening
   const dialog = document.querySelector(`#dialog-${org.legal_person_name.replace(/\s+/g, '-')}`)
+  const orgKey = org.legal_person_name;
   if (dialog) {
-    dialog.showModal()
-    // Only fetch if we don't have the data yet
-    if (!currentData.value[org.legal_person_name]) {
-      fetchPowerOfRepresentation(org)
+    dialog.showModal();
+    // Fetch if data for either format is missing
+    if (!currentData.value[orgKey] || !currentData.value[orgKey].mdoc) {
+       console.log(`Fetching mdoc for ${orgKey} on dialog open`);
+       fetchPowerOfRepresentation(org, 'mdoc');
+    }
+     if (!currentData.value[orgKey] || !currentData.value[orgKey].sd_jwt_vc) {
+       console.log(`Fetching sd_jwt_vc for ${orgKey} on dialog open`);
+       fetchPowerOfRepresentation(org, 'sd_jwt_vc');
     }
   }
 }
