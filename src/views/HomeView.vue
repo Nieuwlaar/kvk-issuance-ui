@@ -107,7 +107,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import NavigationBar from '@/components/NavigationBar.vue'
 import TheKrustyKrab from '@/img/TheKrustyKrab.png'
@@ -120,6 +120,7 @@ const isLoading = ref({})
 const error = ref(null)
 const currentData = ref({})
 const selectedFormat = ref('sd_jwt_vc')
+const refetchIntervalId = ref(null)
 
 const organizations = [
   {
@@ -219,8 +220,24 @@ const prefetchAllData = () => {
   });
 };
 
+const refetchAllData = () => {
+  console.log("Performing scheduled re-fetch...");
+  organizations.forEach(org => {
+    fetchPowerOfRepresentation(org, 'mdoc');
+    fetchPowerOfRepresentation(org, 'sd_jwt_vc');
+  });
+};
+
 onMounted(() => {
   prefetchAllData()
+  const thirtyMinutesInMs = 30 * 60 * 1000;
+  refetchIntervalId.value = setInterval(refetchAllData, thirtyMinutesInMs);
+})
+
+onUnmounted(() => {
+  if (refetchIntervalId.value) {
+    clearInterval(refetchIntervalId.value);
+  }
 })
 
 const openDialog = (org) => {
