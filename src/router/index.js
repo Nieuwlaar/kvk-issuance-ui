@@ -2,6 +2,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import AuthorizationFlowView from '../views/AuthorizationFlowView.vue'
+import PreAuthorizationFlowView from '../views/PreAuthorizationFlowView.vue'
 import LoginView from '../views/LoginView.vue'
 // import PortalView from '../views/PortalView.vue'  // Import the new component
 
@@ -14,8 +15,13 @@ const router = createRouter({
       component: HomeView
     },
     {
-      path: '/authorization-flow',
-      name: 'authorization-flow',
+      path: '/pre-authorization',
+      name: 'pre-authorization',
+      component: PreAuthorizationFlowView
+    },
+    {
+      path: '/authorization',
+      name: 'authorization',
       component: AuthorizationFlowView
     },
     {
