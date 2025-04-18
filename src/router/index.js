@@ -4,6 +4,7 @@ import HomeView from '../views/HomeView.vue'
 import AuthorizationFlowView from '../views/AuthorizationFlowView.vue'
 import PreAuthorizationFlowView from '../views/PreAuthorizationFlowView.vue'
 import LoginView from '../views/LoginView.vue'
+import WalletView from '../views/WalletView.vue'
 // import PortalView from '../views/PortalView.vue'  // Import the new component
 
 const router = createRouter({
@@ -28,6 +29,11 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: LoginView
+    },
+    {
+      path: '/wallet',
+      name: 'wallet',
+      component: WalletView
     },
     // {
     //   path: '/portal',
