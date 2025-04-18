@@ -13,7 +13,7 @@
             <p class="mt-2 text-gray-600">
               Download the Wallet app for Android to manage your test Personal Identification Data (PID).
             </p>
-            <a href="/src/assets/app-demo-debug.apk" download="kvk-wallet-test.apk" class="inline-block mt-4">
+            <a href="/app-demo-debug.apk" download="kvk-wallet-test.apk">
               <button class="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
                 Download Wallet (Android .apk)
               </button>
