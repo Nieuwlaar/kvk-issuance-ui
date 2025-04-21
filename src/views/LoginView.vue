@@ -256,21 +256,21 @@ const openPidAuthenticationDialog = async () => {
 // Function to start polling the extraction endpoint
 const startPolling = () => {
   pollingStatus.value = 'pending';
-  console.log("Start polling with extraction endpoint:", extractionEndpoint.value);
-  console.log("Request ID being polled:", requestId.value);
+  console.log("Starting polling with request ID:", requestId.value);
 
   pollingInterval.value = setInterval(async () => {
     try {
       console.log("Polling cycle starting...");
       
-      if (!extractionEndpoint.value) {
-        console.error("No extraction endpoint available for polling");
+      if (!requestId.value) {
+        console.error("No request ID available for polling");
         clearInterval(pollingInterval.value);
         return;
       }
       
       const baseUrl = 'https://kvk-issuance-service.nieuwlaar.com/rdw-niscy';
-      const fullUrl = `${baseUrl}${extractionEndpoint.value}`;
+      // Using the authentication-requests endpoint instead of pid-extraction
+      const fullUrl = `${baseUrl}/authentication-requests/${requestId.value}`;
       console.log("Full polling URL:", fullUrl);
       
       console.log("Sending polling request...");
@@ -294,8 +294,9 @@ const startPolling = () => {
       const data = await response.json();
       console.log('Detailed polling response:', JSON.stringify(data, null, 2));
       
-      if (data.status === 'success' && data.data?.extracted_data) {
-        console.log("Authentication successful! Extracted data:", data.data.extracted_data);
+      // Check for completion in the authentication-requests response
+      if (data.status === 'success' && data.presentation_data?.extracted_data) {
+        console.log("Authentication successful! Extracted data:", data.presentation_data.extracted_data);
         // Authentication successful - stop polling
         clearInterval(pollingInterval.value);
         pollingStatus.value = 'success';
@@ -305,14 +306,18 @@ const startPolling = () => {
         await requestAuthToken();
       } else if (data.status === 'error') {
         // Error occurred - stop polling
-        console.error("Polling returned error status:", data.message);
+        console.error("Polling returned error status:", data.message || "Unknown error");
         clearInterval(pollingInterval.value);
         pollingStatus.value = 'error';
         error.value = data.message || 'Authentication failed';
+      } else if (data.status === 'extraction_incomplete') {
+        console.log("Extraction incomplete, some data is missing");
+        clearInterval(pollingInterval.value);
+        pollingStatus.value = 'error';
+        error.value = 'Authentication data extraction incomplete';
       } else {
         console.log("Authentication status still pending, continuing polling...");
       }
-      // If status is 'pending', continue polling
       
     } catch (err) {
       console.error('Error during polling:', err);
