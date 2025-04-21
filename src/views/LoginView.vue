@@ -230,6 +230,7 @@ const openPidAuthenticationDialog = async () => {
     console.log('Received PID authentication data:', data);
 
     if (data.status === 'success' && data.data?.wallet_link) {
+      console.log("Received successfull data");
       walletLink.value = data.data.wallet_link;
       requestId.value = data.data.id;
       extractionEndpoint.value = data.data.extraction_endpoint;
@@ -255,7 +256,8 @@ const openPidAuthenticationDialog = async () => {
 // Function to start polling the extraction endpoint
 const startPolling = () => {
   pollingStatus.value = 'pending';
-  
+  console.log("Start polling");
+
   pollingInterval.value = setInterval(async () => {
     try {
       if (!extractionEndpoint.value) {
