@@ -18,23 +18,35 @@
           <div v-if="isAuthenticated" class="relative">
             <button 
               @click="toggleProfileMenu" 
-              class="flex items-center space-x-2 bg-white px-3 py-1 rounded-md border border-gray-300 hover:bg-gray-50 transition"
+              class="profile-toggle-button flex items-center space-x-2 bg-white px-3 py-1 rounded-md border border-gray-300 hover:bg-gray-50 transition"
             >
               <UserIcon class="h-5 w-5 text-gray-600" />
               <span class="text-sm font-medium text-gray-700">{{ userData.given_name }}</span>
             </button>
             
             <!-- Profile Dropdown Menu -->
-            <div v-if="showProfileMenu" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50 border border-gray-200 profile-menu">
-              <div class="p-3 border-b border-gray-200">
-                <p class="text-sm font-medium text-gray-800">{{ userData.given_name }} {{ userData.family_name }}</p>
-                <p class="text-xs text-gray-500">Birth Date: {{ userData.birth_date }}</p>
+            <div v-if="showProfileMenu" class="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg z-50 border border-gray-200 profile-menu">
+              <div class="p-4 border-b border-gray-200">
+                <h3 class="text-lg font-medium text-gray-800 mb-1">User Profile</h3>
+                <div class="space-y-2">
+                  <div>
+                    <p class="text-xs text-gray-500">Name</p>
+                    <p class="text-sm font-medium">{{ userData.given_name }} {{ userData.family_name }}</p>
+                  </div>
+                  <div>
+                    <p class="text-xs text-gray-500">Birth Date</p>
+                    <p class="text-sm font-medium">{{ userData.birth_date }}</p>
+                  </div>
+                </div>
               </div>
               <div class="p-2">
                 <button 
                   @click="logout" 
-                  class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
+                  class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 rounded-md font-medium flex items-center"
                 >
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                  </svg>
                   Logout
                 </button>
               </div>
@@ -162,14 +174,23 @@
   
   // Handle clicks outside the profile menu to close it
   const handleClickOutside = (event) => {
+    // Get profile button element (the toggle button)
+    const profileButton = document.querySelector('.profile-toggle-button')
     const profileMenu = document.querySelector('.profile-menu')
-    if (profileMenu && !profileMenu.contains(event.target) && showProfileMenu.value) {
+    
+    // Check if click is outside both the menu and the toggle button
+    if (profileMenu && 
+        !profileMenu.contains(event.target) && 
+        (!profileButton || !profileButton.contains(event.target)) && 
+        showProfileMenu.value) {
       showProfileMenu.value = false
     }
   }
   
   // Toggle profile menu visibility
-  const toggleProfileMenu = () => {
+  const toggleProfileMenu = (event) => {
+    // Prevent event from bubbling to document click handler
+    event.stopPropagation()
     showProfileMenu.value = !showProfileMenu.value
   }
   
