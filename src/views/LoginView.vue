@@ -256,18 +256,24 @@ const openPidAuthenticationDialog = async () => {
 // Function to start polling the extraction endpoint
 const startPolling = () => {
   pollingStatus.value = 'pending';
-  console.log("Start polling");
+  console.log("Start polling with extraction endpoint:", extractionEndpoint.value);
+  console.log("Request ID being polled:", requestId.value);
 
   pollingInterval.value = setInterval(async () => {
     try {
+      console.log("Polling cycle starting...");
+      
       if (!extractionEndpoint.value) {
+        console.error("No extraction endpoint available for polling");
         clearInterval(pollingInterval.value);
         return;
       }
       
       const baseUrl = 'https://kvk-issuance-service.nieuwlaar.com/rdw-niscy';
       const fullUrl = `${baseUrl}${extractionEndpoint.value}`;
+      console.log("Full polling URL:", fullUrl);
       
+      console.log("Sending polling request...");
       const response = await fetch(fullUrl, {
         method: 'GET',
         headers: {
@@ -275,68 +281,98 @@ const startPolling = () => {
         }
       });
       
+      console.log("Polling response status:", response.status);
+      
       if (!response.ok) {
-        throw new Error(`Polling request failed with status: ${response.status}`);
+        console.error(`Polling request failed with status: ${response.status}`);
+        const errorText = await response.text();
+        console.error("Error response body:", errorText);
+        throw new Error(`Polling request failed with status: ${response.status}. Response: ${errorText}`);
       }
       
+      console.log("Parsing polling response JSON...");
       const data = await response.json();
-      console.log('Polling response:', data);
+      console.log('Detailed polling response:', JSON.stringify(data, null, 2));
       
       if (data.status === 'success' && data.data?.extracted_data) {
+        console.log("Authentication successful! Extracted data:", data.data.extracted_data);
         // Authentication successful - stop polling
         clearInterval(pollingInterval.value);
         pollingStatus.value = 'success';
         
         // Request authentication token
+        console.log("Requesting authentication token...");
         await requestAuthToken();
       } else if (data.status === 'error') {
         // Error occurred - stop polling
+        console.error("Polling returned error status:", data.message);
         clearInterval(pollingInterval.value);
         pollingStatus.value = 'error';
         error.value = data.message || 'Authentication failed';
+      } else {
+        console.log("Authentication status still pending, continuing polling...");
       }
       // If status is 'pending', continue polling
       
     } catch (err) {
-      console.error('Error polling extraction endpoint:', err);
+      console.error('Error during polling:', err);
+      console.error('Error stack:', err.stack);
       error.value = err.message || 'Error checking authentication status';
       pollingStatus.value = 'error';
       clearInterval(pollingInterval.value);
     }
   }, 3000); // Poll every 3 seconds
+  
+  console.log("Polling interval set:", pollingInterval.value);
 };
 
 // Function to request authentication token
 const requestAuthToken = async () => {
+  console.log("Starting token request with auth_id:", requestId.value);
+  
   try {
-    const response = await fetch('https://kvk-issuance-service.nieuwlaar.com/rdw-niscy/auth/token', {
+    const tokenUrl = 'https://kvk-issuance-service.nieuwlaar.com/rdw-niscy/auth/token';
+    console.log("Token request URL:", tokenUrl);
+    
+    const requestBody = {
+      auth_id: requestId.value
+    };
+    console.log("Token request body:", JSON.stringify(requestBody));
+    
+    const response = await fetch(tokenUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        auth_id: requestId.value
-      })
+      body: JSON.stringify(requestBody)
     });
     
+    console.log("Token response status:", response.status);
+    
     if (!response.ok) {
-      throw new Error(`Failed to get authentication token: ${response.status}`);
+      const errorText = await response.text();
+      console.error("Token request failed. Response:", errorText);
+      throw new Error(`Failed to get authentication token: ${response.status}. Response: ${errorText}`);
     }
     
     const tokenData = await response.json();
+    console.log("Token received successfully. Token type:", tokenData.token_type);
     
     // Store tokens in localStorage
     localStorage.setItem('accessToken', tokenData.access_token);
     localStorage.setItem('refreshToken', tokenData.refresh_token);
     
     // Update authentication state
+    console.log("Updating authentication state...");
     await checkAuthenticationStatus();
     
     // Close the dialog
+    console.log("Authentication complete, closing dialog");
     closeDialog();
     
   } catch (err) {
     console.error('Error requesting authentication token:', err);
+    console.error('Error stack:', err.stack);
     error.value = err.message || 'Failed to complete authentication';
     pollingStatus.value = 'error';
   }
