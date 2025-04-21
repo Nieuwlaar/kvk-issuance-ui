@@ -3,7 +3,36 @@
     <NavigationBar />
     <div class="py-10">
       <main>
-        <div class="flex justify-center space-x-4 mx-auto max-w-4xl">
+        <!-- User Profile Display (when authenticated) -->
+        <div v-if="isAuthenticated" class="flex justify-center space-x-4 mx-auto max-w-4xl">
+          <div class="max-w-sm w-full overflow-hidden bg-white rounded-lg border border-gray-500">
+            <div class="max-w-sm mx-auto overflow-hidden bg-white">
+              <div class="px-6 py-4">
+                <h2 class="text-2xl font-semibold text-gray-800">Welcome!</h2>
+                <p class="mt-1 text-green-600 font-medium">Successfully logged in</p>
+              </div>
+              
+              <div class="px-6 pt-2 pb-2">
+                <div class="flex flex-col space-y-2">
+                  <p><span class="font-medium">Name:</span> {{ userProfile.given_name }} {{ userProfile.family_name }}</p>
+                  <p><span class="font-medium">Birth Date:</span> {{ userProfile.birth_date }}</p>
+                </div>
+              </div>
+              
+              <div class="px-6 pt-4 pb-4">
+                <button 
+                  @click="logout" 
+                  class="flex items-center px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 w-full"
+                >
+                  <span class="flex-1 text-center font-medium text-gray-700">Logout</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Login Options (when not authenticated) -->
+        <div v-else class="flex justify-center space-x-4 mx-auto max-w-4xl">
           <div class="max-w-sm w-full overflow-hidden bg-white rounded-lg border border-gray-500">
             <div class="max-w-sm mx-auto overflow-hidden bg-white">
               <div class="px-6 py-4">
@@ -50,6 +79,13 @@
             <div>
               <h3 class="font-medium">Scan QR Code:</h3>
               <img :src="qrCodeDataUrl" alt="PID Authentication QR Code" class="mt-2 mx-auto" style="max-width: 200px;">
+              
+              <!-- Status Message (when polling) -->
+              <div v-if="pollingStatus" class="mt-2 text-sm">
+                <p v-if="pollingStatus === 'pending'" class="text-blue-600">Waiting for authentication...</p>
+                <p v-else-if="pollingStatus === 'success'" class="text-green-600">Authentication successful! Logging you in...</p>
+                <p v-else-if="pollingStatus === 'error'" class="text-red-600">Authentication failed. Please try again.</p>
+              </div>
             </div>
             <div>
               <h3 class="font-medium">Or use Deep Link:</h3>
@@ -84,7 +120,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue' // Import ref
+import { ref, onMounted } from 'vue' // Import ref and onMounted
 import NavigationBar from '@/components/NavigationBar.vue'
 import euWalletImage from '@/assets/EUWallet.png'
 import QRCode from 'qrcode' // Import QRCode library
@@ -95,6 +131,59 @@ const isLoading = ref(false)
 const error = ref(null)
 const qrCodeDataUrl = ref(null)
 const walletLink = ref(null)
+const requestId = ref(null)
+const extractionEndpoint = ref(null)
+const pollingStatus = ref(null)
+const pollingInterval = ref(null)
+const isAuthenticated = ref(false)
+const userProfile = ref({
+  given_name: '',
+  family_name: '',
+  birth_date: ''
+})
+
+// Check for existing tokens on component mount
+onMounted(() => {
+  checkAuthenticationStatus()
+})
+
+// Function to check if the user is already authenticated
+const checkAuthenticationStatus = async () => {
+  const accessToken = localStorage.getItem('accessToken')
+  
+  if (!accessToken) {
+    isAuthenticated.value = false
+    return
+  }
+  
+  try {
+    // Validate the token with the backend
+    const response = await fetch('https://kvk-issuance-service.nieuwlaar.com/rdw-niscy/auth/validate', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      }
+    })
+    
+    if (response.ok) {
+      const userData = await response.json()
+      isAuthenticated.value = true
+      userProfile.value = {
+        given_name: userData.given_name,
+        family_name: userData.family_name,
+        birth_date: userData.birth_date
+      }
+    } else {
+      // Token invalid or expired, clear storage
+      localStorage.removeItem('accessToken')
+      localStorage.removeItem('refreshToken')
+      isAuthenticated.value = false
+    }
+  } catch (err) {
+    console.error('Error validating token:', err)
+    isAuthenticated.value = false
+  }
+}
 
 // Function to open the dialog and fetch PID authentication data
 const openPidAuthenticationDialog = async () => {
@@ -103,6 +192,15 @@ const openPidAuthenticationDialog = async () => {
   error.value = null
   qrCodeDataUrl.value = null
   walletLink.value = null
+  requestId.value = null
+  extractionEndpoint.value = null
+  pollingStatus.value = null
+  
+  // Clear any existing polling interval
+  if (pollingInterval.value) {
+    clearInterval(pollingInterval.value)
+    pollingInterval.value = null
+  }
 
   // Show the dialog
   pidDialogRef.value?.showModal()
@@ -111,7 +209,7 @@ const openPidAuthenticationDialog = async () => {
     const apiUrl = 'https://kvk-issuance-service.nieuwlaar.com/rdw-niscy/pid-authentication';
     console.log(`Fetching PID authentication from: ${apiUrl}`);
     const response = await fetch(apiUrl, {
-      method: 'GET', // Assuming GET based on @router.get
+      method: 'GET',
       headers: {
         'Accept': 'application/json', 
       },
@@ -133,8 +231,14 @@ const openPidAuthenticationDialog = async () => {
 
     if (data.status === 'success' && data.data?.wallet_link) {
       walletLink.value = data.data.wallet_link;
+      requestId.value = data.data.id;
+      extractionEndpoint.value = data.data.extraction_endpoint;
+      
       // Generate QR Code
       qrCodeDataUrl.value = await QRCode.toDataURL(walletLink.value);
+      
+      // Start polling the extraction endpoint
+      startPolling();
     } else {
       console.error('Invalid API response structure:', data);
       throw new Error(data.message || 'Received invalid data structure from API.');
@@ -148,15 +252,135 @@ const openPidAuthenticationDialog = async () => {
   }
 };
 
+// Function to start polling the extraction endpoint
+const startPolling = () => {
+  pollingStatus.value = 'pending';
+  
+  pollingInterval.value = setInterval(async () => {
+    try {
+      if (!extractionEndpoint.value) {
+        clearInterval(pollingInterval.value);
+        return;
+      }
+      
+      const baseUrl = 'https://kvk-issuance-service.nieuwlaar.com/rdw-niscy';
+      const fullUrl = `${baseUrl}${extractionEndpoint.value}`;
+      
+      const response = await fetch(fullUrl, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Polling request failed with status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      console.log('Polling response:', data);
+      
+      if (data.status === 'success' && data.data?.extracted_data) {
+        // Authentication successful - stop polling
+        clearInterval(pollingInterval.value);
+        pollingStatus.value = 'success';
+        
+        // Request authentication token
+        await requestAuthToken();
+      } else if (data.status === 'error') {
+        // Error occurred - stop polling
+        clearInterval(pollingInterval.value);
+        pollingStatus.value = 'error';
+        error.value = data.message || 'Authentication failed';
+      }
+      // If status is 'pending', continue polling
+      
+    } catch (err) {
+      console.error('Error polling extraction endpoint:', err);
+      error.value = err.message || 'Error checking authentication status';
+      pollingStatus.value = 'error';
+      clearInterval(pollingInterval.value);
+    }
+  }, 3000); // Poll every 3 seconds
+};
+
+// Function to request authentication token
+const requestAuthToken = async () => {
+  try {
+    const response = await fetch('https://kvk-issuance-service.nieuwlaar.com/rdw-niscy/auth/token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        auth_id: requestId.value
+      })
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Failed to get authentication token: ${response.status}`);
+    }
+    
+    const tokenData = await response.json();
+    
+    // Store tokens in localStorage
+    localStorage.setItem('accessToken', tokenData.access_token);
+    localStorage.setItem('refreshToken', tokenData.refresh_token);
+    
+    // Update authentication state
+    await checkAuthenticationStatus();
+    
+    // Close the dialog
+    closeDialog();
+    
+  } catch (err) {
+    console.error('Error requesting authentication token:', err);
+    error.value = err.message || 'Failed to complete authentication';
+    pollingStatus.value = 'error';
+  }
+};
+
 // Function to close the dialog
 const closeDialog = () => {
   pidDialogRef.value?.close()
-  // Optional: Reset state when closing if needed
-  // isLoading.value = false;
-  // error.value = null;
-  // qrCodeDataUrl.value = null;
-  // walletLink.value = null;
+  
+  // Clear polling interval if active
+  if (pollingInterval.value) {
+    clearInterval(pollingInterval.value)
+    pollingInterval.value = null
+  }
 }
+
+// Function to logout
+const logout = async () => {
+  try {
+    const accessToken = localStorage.getItem('accessToken');
+    
+    if (accessToken) {
+      // Call logout endpoint to invalidate the token
+      await fetch('https://kvk-issuance-service.nieuwlaar.com/rdw-niscy/auth/logout', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      });
+    }
+  } catch (err) {
+    console.error('Error during logout:', err);
+  } finally {
+    // Clear tokens regardless of API call success
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    
+    // Reset authentication state
+    isAuthenticated.value = false;
+    userProfile.value = {
+      given_name: '',
+      family_name: '',
+      birth_date: ''
+    };
+  }
+};
 
 </script>
 
