@@ -5,13 +5,19 @@
       </div>
   
       <div class="flex items-center justify-between bg-gray-200 px-6 py-2 sm:px-3.5">
-        <p class="text-sm leading-6 text-black">
-          Pre-Authorization Flow (
-          <router-link to="/authorization-flow" class="underline hover:text-gray-600">
-            Authorization Flow here
+        <div class="flex items-center space-x-3">
+          <router-link to="/" class="text-cyan-800 hover:text-cyan-900">
+            <HomeIcon class="h-5 w-5" aria-hidden="true" />
+            <span class="sr-only">Home</span>
           </router-link>
-          ). Issuance based on <a href="https://github.com/eu-digital-identity-wallet/eudi-srv-web-issuing-eudiw-py/tags" class="underline hover:text-gray-600">eudi-srv-web-issuing-eudiw-py</a> 0.7.1 using OpenID4VCI draft 13 
-        </p>
+          <p class="text-sm leading-6 text-black">
+            Pre-Authorization Flow (
+            <router-link to="/authorization-flow" class="underline hover:text-gray-600">
+              Authorization Flow here
+            </router-link>
+            ). Issuance based on <a href="https://github.com/eu-digital-identity-wallet/eudi-srv-web-issuing-eudiw-py/tags" class="underline hover:text-gray-600">eudi-srv-web-issuing-eudiw-py</a> 0.7.1 using OpenID4VCI draft 13 
+          </p>
+        </div>
         
         <!-- Auth Status Button -->
         <div class="flex items-center">
@@ -144,7 +150,8 @@
     ChevronDownIcon,
     MagnifyingGlassIcon,
     GlobeAltIcon,
-    UserIcon
+    UserIcon,
+    HomeIcon
   } from '@heroicons/vue/24/outline'
   
   const mobileMenuOpen = ref(false)
