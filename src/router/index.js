@@ -5,6 +5,7 @@ import AuthorizationFlowView from '../views/AuthorizationFlowView.vue'
 import PreAuthorizationFlowView from '../views/PreAuthorizationFlowView.vue'
 import LoginView from '../views/LoginView.vue'
 import WalletView from '../views/WalletView.vue'
+import RelyingPartyView from '../views/RelyingPartyView.vue'
 // import PortalView from '../views/PortalView.vue'  // Import the new component
 
 const router = createRouter({
@@ -37,6 +38,11 @@ const router = createRouter({
       path: '/wallet',
       name: 'wallet',
       component: WalletView
+    },
+    {
+      path: '/relying-party',
+      name: 'relying-party',
+      component: RelyingPartyView
     },
     // {
     //   path: '/portal',

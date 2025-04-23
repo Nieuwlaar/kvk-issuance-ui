@@ -1,129 +1,155 @@
 <template>
-  <div class="min-h-full relative">
-    <NavigationBar />
-    <div class="py-10">
-      <main>
-        <!-- User Profile Display (when authenticated) -->
-        <div v-if="isAuthenticated" class="flex justify-center space-x-4 mx-auto max-w-4xl">
-          <div class="max-w-sm w-full overflow-hidden bg-white rounded-lg border border-gray-500">
-            <div class="max-w-sm mx-auto overflow-hidden bg-white">
-              <div class="px-6 py-4">
-                <h2 class="text-2xl font-semibold text-gray-800">Welcome!</h2>
-                <p class="mt-1 text-green-600 font-medium">Successfully logged in</p>
-              </div>
-              
-              <div class="px-6 pt-2 pb-2">
-                <div class="flex flex-col space-y-2">
-                  <p><span class="font-medium">Name:</span> {{ userProfile.given_name }} {{ userProfile.family_name }}</p>
-                  <p><span class="font-medium">Birth Date:</span> {{ userProfile.birth_date }}</p>
+  <FlowLayout>
+    <template #before-flow-bar>
+      <div class="min-h-full relative">
+        <NavigationBar />
+      </div>
+    </template>
+    
+    <div class="min-h-full relative">
+      <div class="py-10">
+        <main>
+          <!-- User Profile Display (when authenticated) -->
+          <div v-if="isAuthenticated" class="flex justify-center space-x-4 mx-auto max-w-4xl">
+            <div class="max-w-sm w-full overflow-hidden bg-white rounded-lg border border-gray-500">
+              <div class="max-w-sm mx-auto overflow-hidden bg-white">
+                <div class="px-6 py-4">
+                  <h2 class="text-2xl font-semibold text-gray-800">Welcome!</h2>
+                  <p class="mt-1 text-green-600 font-medium">Successfully logged in</p>
+                </div>
+                
+                <div class="px-6 pt-2 pb-2">
+                  <div class="flex flex-col space-y-2">
+                    <p><span class="font-medium">Name:</span> {{ userProfile.given_name }} {{ userProfile.family_name }}</p>
+                    <p><span class="font-medium">Birth Date:</span> {{ userProfile.birth_date }}</p>
+                  </div>
+                </div>
+                
+                <div class="px-6 pt-4 pb-4">
+                  <button 
+                    @click="logout" 
+                    class="flex items-center px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 w-full"
+                  >
+                    <span class="flex-1 text-center font-medium text-gray-700">Logout</span>
+                  </button>
+                </div>
+                
+                <!-- Continue Button for Flow -->
+                <div v-if="isInFlow" class="px-6 pt-2 pb-6">
+                  <router-link 
+                    to="/authorization?flow=por" 
+                    class="flex items-center justify-center px-4 py-2 bg-cyan-800 rounded-lg hover:bg-cyan-700 w-full"
+                  >
+                    <span class="flex-1 text-center font-medium text-white">Continue to Get PoR</span>
+                    <span aria-hidden="true" class="text-white ml-1">→</span>
+                  </router-link>
                 </div>
               </div>
-              
-              <div class="px-6 pt-4 pb-4">
-                <button 
-                  @click="logout" 
-                  class="flex items-center px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 w-full"
-                >
-                  <span class="flex-1 text-center font-medium text-gray-700">Logout</span>
-                </button>
-              </div>
             </div>
           </div>
-        </div>
-        
-        <!-- Login Options (when not authenticated) -->
-        <div v-else class="flex justify-center space-x-4 mx-auto max-w-4xl">
-          <div class="max-w-sm w-full overflow-hidden bg-white rounded-lg border border-gray-500">
-            <div class="max-w-sm mx-auto overflow-hidden bg-white">
-              <div class="px-6 py-4">
-                <h2 class="text-2xl font-semibold text-gray-800">Authentication</h2>
-                <p class="mt-1 text-gray-600">Please select the authentication method you want to use.</p>
-              </div>
-              <div class="px-6 pt-4 pb-2">
-                <button 
-                  @click="openPidAuthenticationDialog" 
-                  class="flex items-center px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 w-full"
-                >
-                  <img :src="euWalletImage" alt="Login" class="h-6 mr-4">
-                  <span class="flex-1 text-left font-medium text-gray-700">Login with EU Wallet</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon" class="h-6 w-6 text-gray-900">
+          
+          <!-- Login Options (when not authenticated) -->
+          <div v-else class="flex justify-center space-x-4 mx-auto max-w-4xl">
+            <div class="max-w-sm w-full overflow-hidden bg-white rounded-lg border border-gray-500">
+              <div class="max-w-sm mx-auto overflow-hidden bg-white">
+                <div class="px-6 py-4">
+                  <h2 class="text-2xl font-semibold text-gray-800">Authentication</h2>
+                  <p class="mt-1 text-gray-600">Please select the authentication method you want to use.</p>
+                </div>
+                <div class="px-6 pt-4 pb-2">
+                  <button 
+                    @click="openPidAuthenticationDialog" 
+                    class="flex items-center px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 w-full"
+                  >
+                    <img :src="euWalletImage" alt="Login" class="h-6 mr-4">
+                    <span class="flex-1 text-left font-medium text-gray-700">Login with EU Wallet</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon" class="h-6 w-6 text-gray-900">
+                      <path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                    </svg>
+                  </button>
+                </div>
+                <div class="flex mb-4 items-center px-6 pt-4 pb-2">
+                  <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon" class="h-5 w-5 flex-none text-gray-900">
                     <path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
-                  </svg>
-                </button>
-              </div>
-              <div class="flex mb-4 items-center px-6 pt-4 pb-2">
-                <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon" class="h-5 w-5 flex-none text-gray-900">
-                  <path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
-                </svg> -->
-                <!-- <a href="#" class="text-blue-600 hover:underline">More Information</a> -->
+                  </svg> -->
+                  <!-- <a href="#" class="text-blue-600 hover:underline">More Information</a> -->
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </main>
+        </main>
+      </div>
+  
+      <!-- PID Authentication Dialog -->
+      <Teleport to="body">
+        <dialog ref="pidDialogRef" class="rounded-lg p-6 shadow-xl max-w-md w-full">
+          <div class="space-y-4">
+            <h2 class="text-lg font-semibold">Scan with EU Wallet</h2>
+            
+            <!-- Loading Indicator -->
+            <div v-if="isLoading" class="flex justify-center items-center h-48"> 
+              <div class="loader"></div> <!-- Using similar loader style as PreAuthorizationFlowView -->
+            </div>
+  
+            <!-- Data Display Area -->
+            <div v-else-if="qrCodeDataUrl" class="space-y-4 text-center">
+              <div>
+                <h3 class="font-medium">Scan QR Code:</h3>
+                <img :src="qrCodeDataUrl" alt="PID Authentication QR Code" class="mt-2 mx-auto" style="max-width: 200px;">
+                
+                <!-- Status Message (when polling) -->
+                <div v-if="pollingStatus" class="mt-2 text-sm">
+                  <p v-if="pollingStatus === 'pending'" class="text-blue-600">Waiting for authentication...</p>
+                  <p v-else-if="pollingStatus === 'success'" class="text-green-600">Authentication successful! Logging you in...</p>
+                  <p v-else-if="pollingStatus === 'error'" class="text-red-600">Authentication failed. Please try again.</p>
+                </div>
+              </div>
+              <div>
+                <h3 class="font-medium">Or use Deep Link:</h3>
+                <a :href="walletLink" target="_blank" class="text-sm text-blue-600 hover:underline break-all">Open Wallet</a>
+              </div>
+            </div>
+            
+            <!-- Error Display -->
+            <div v-else-if="error" class="text-red-600 text-center">
+              <p>Error initiating authentication:</p>
+              <p class="text-sm mt-1">{{ error }}</p>
+            </div>
+            
+            <!-- Fallback if no data and no error (shouldn't normally happen after loading) -->
+            <div v-else class="text-center text-gray-500 py-4">
+               Could not load authentication details.
+             </div>
+  
+            <!-- Close Button -->
+            <div class="flex justify-end mt-4">
+              <button 
+                @click="closeDialog"
+                class="rounded-md bg-gray-200 px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-300"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </dialog>
+      </Teleport>
     </div>
-
-    <!-- PID Authentication Dialog -->
-    <Teleport to="body">
-      <dialog ref="pidDialogRef" class="rounded-lg p-6 shadow-xl max-w-md w-full">
-        <div class="space-y-4">
-          <h2 class="text-lg font-semibold">Scan with EU Wallet</h2>
-          
-          <!-- Loading Indicator -->
-          <div v-if="isLoading" class="flex justify-center items-center h-48"> 
-            <div class="loader"></div> <!-- Using similar loader style as PreAuthorizationFlowView -->
-          </div>
-
-          <!-- Data Display Area -->
-          <div v-else-if="qrCodeDataUrl" class="space-y-4 text-center">
-            <div>
-              <h3 class="font-medium">Scan QR Code:</h3>
-              <img :src="qrCodeDataUrl" alt="PID Authentication QR Code" class="mt-2 mx-auto" style="max-width: 200px;">
-              
-              <!-- Status Message (when polling) -->
-              <div v-if="pollingStatus" class="mt-2 text-sm">
-                <p v-if="pollingStatus === 'pending'" class="text-blue-600">Waiting for authentication...</p>
-                <p v-else-if="pollingStatus === 'success'" class="text-green-600">Authentication successful! Logging you in...</p>
-                <p v-else-if="pollingStatus === 'error'" class="text-red-600">Authentication failed. Please try again.</p>
-              </div>
-            </div>
-            <div>
-              <h3 class="font-medium">Or use Deep Link:</h3>
-              <a :href="walletLink" target="_blank" class="text-sm text-blue-600 hover:underline break-all">Open Wallet</a>
-            </div>
-          </div>
-          
-          <!-- Error Display -->
-          <div v-else-if="error" class="text-red-600 text-center">
-            <p>Error initiating authentication:</p>
-            <p class="text-sm mt-1">{{ error }}</p>
-          </div>
-          
-          <!-- Fallback if no data and no error (shouldn't normally happen after loading) -->
-          <div v-else class="text-center text-gray-500 py-4">
-             Could not load authentication details.
-           </div>
-
-          <!-- Close Button -->
-          <div class="flex justify-end mt-4">
-            <button 
-              @click="closeDialog"
-              class="rounded-md bg-gray-200 px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-300"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      </dialog>
-    </Teleport>
-  </div>
+  </FlowLayout>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue' // Import ref and onMounted
+import { useRoute } from 'vue-router'
 import NavigationBar from '@/components/NavigationBar.vue'
+import FlowLayout from '@/components/FlowLayout.vue'
 import euWalletImage from '@/assets/EUWallet.png'
 import QRCode from 'qrcode' // Import QRCode library
+import { useFlowStore } from '@/stores/flowStore'
+
+// Get route and flow state
+const route = useRoute()
+const flowStore = useFlowStore()
+const isInFlow = ref(false)
 
 // Refs for dialog state and data
 const pidDialogRef = ref(null)
@@ -145,6 +171,15 @@ const userProfile = ref({
 // Check for existing tokens on component mount
 onMounted(() => {
   checkAuthenticationStatus()
+  
+  // Check if we're in the PoR flow
+  if (route.query.flow === 'por') {
+    isInFlow.value = true
+    flowStore.startFlow()
+    flowStore.setCurrentStep('login')
+  } else {
+    isInFlow.value = false
+  }
 })
 
 // Function to check if the user is already authenticated
@@ -431,7 +466,7 @@ const logout = async () => {
 /* Add loader styles if not globally defined, borrowing from PreAuthorizationFlowView */
 .loader {
   border: 16px solid #f3f3f3; /* Light grey */
-  border-top: 16px solid #3498db; /* Blue */
+  border-top: 16px solid #155e75; /* cyan-800 */
   border-radius: 50%;
   width: 80px; /* Smaller loader for dialog */
   height: 80px;

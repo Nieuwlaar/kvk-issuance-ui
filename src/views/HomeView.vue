@@ -3,12 +3,35 @@
     <NavigationBar />
     <div class="bg-gray-100 h-1"></div>
     <div class="py-10">
-      <main class="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8">
+      <main class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-8">
           <h1 class="text-2xl font-bold text-gray-900 sm:text-3xl">Welcome to the KVK Pilot Issuance UI</h1>
           <p class="mt-2 text-lg text-gray-600">Choose an option below to proceed:</p>
         </div>
+
+        <!-- KVK PoR Pilot Flow -->
+        <div class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden p-6 mb-8">
+          <div class="mb-4">
+            <h2 class="text-xl font-semibold text-gray-900">Pilot with KVK Power of Representation</h2>
+            <p class="mt-2 text-sm text-gray-600">Complete end-to-end flow demonstrating Power of Representation issuance and verification:</p>
+            <ul class="mt-3 list-disc list-inside text-sm text-gray-600 space-y-1">
+              <li>Get a PID issued to your test wallet</li>
+              <li>Authenticate to KVK using your PID</li>
+              <li>Receive a Power of Representation credential</li>
+              <li>Verify your PoR with relying parties</li>
+            </ul>
+          </div>
+          <router-link 
+            to="/wallet?flow=por"
+            class="w-full inline-flex justify-center rounded-md bg-cyan-800 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-cyan-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-800"
+          >
+            Start Complete PoR Flow
+          </router-link>
+        </div>
+        
+        <!-- Individual Components -->
         <div class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden p-6">
+          <h2 class="text-lg font-semibold text-gray-900 mb-4">Individual Components</h2>
           <nav class="flex flex-col space-y-4">
             <!-- Use router-link for navigation -->
             <router-link 
@@ -21,7 +44,7 @@
               to="/authorization" 
               class="rounded-md bg-white px-3.5 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 text-center"
             >
-              Start Authorization Flow (Placeholder)
+              Start Authorization Flow
             </router-link>
             <router-link
               to="/wallet"
