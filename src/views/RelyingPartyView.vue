@@ -30,7 +30,7 @@
                     <div class="flex items-center mb-2">
                       <div class="w-6 h-4 overflow-hidden flex-shrink-0 mr-2 border border-gray-300" style="background: linear-gradient(to bottom, #AE1C28 33%, white 33%, white 66%, #21468B 66%);">
                       </div>
-                      <h4 class="font-medium text-gray-800">Test KVK Relying Party</h4>
+                      <h4 class="font-medium text-gray-800">Test KVK Relying Party (not yet functional)</h4>
                     </div>
                     <p class="text-gray-600 text-sm">Dutch Chamber of Commerce verification service</p>
                   </a>
