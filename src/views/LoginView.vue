@@ -266,7 +266,7 @@ const openPidAuthenticationDialog = async () => {
 
     if (data.status === 'success' && data.data?.wallet_link) {
       console.log("Received successfull data");
-      walletLink.value = data.data.wallet_link;
+      walletLink.value = data.data.wallet_link.replace('eudi-openid4vp', 'haip');
       requestId.value = data.data.id;
       extractionEndpoint.value = data.data.extraction_endpoint;
       
