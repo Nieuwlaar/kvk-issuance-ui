@@ -34,16 +34,7 @@
               <ol class="list-decimal list-inside mt-3 space-y-1 text-gray-600">
                   <li>Open the (NiScy) Wallet app.</li>
                   <li>Select the option to add a new PID.</li>
-                  <li>Choose "Country Selection" and Submit.</li>
-                  <li>Select "FormEU".</li>
-                  <li>Fill in the required details in the form:
-                    <ul class="list-disc list-inside ml-5 space-y-1">
-                      <li>family_name: "Squarepants"</li>
-                      <li>given_name: "Spongebob"</li>
-                      <li>birth_date: "2000-01-01"</li>
-                    </ul>
-                  </li>
-                  <li>Submit the form, review the details, and Authorize the issuance.</li>
+                  <li>Choose "SpongeBob SquarePants" as your PID and Submit.</li>
               </ol>
             </div>
             

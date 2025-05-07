@@ -26,31 +26,31 @@
                 <h3 class="font-medium text-gray-800 mb-3">Available Relying Parties:</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <!-- KVK Relying Party -->
-                  <a href="https://mijn-kvk-portal.nieuwlaar.com/" target="_blank" class="border border-gray-300 rounded-lg p-4 hover:bg-gray-50 transition cursor-pointer">
+                  <!-- <a href="https://mijn-kvk-portal.nieuwlaar.com/" target="_blank" class="border border-gray-300 rounded-lg p-4 hover:bg-gray-50 transition cursor-pointer">
                     <div class="flex items-center mb-2">
                       <div class="w-6 h-4 overflow-hidden flex-shrink-0 mr-2 border border-gray-300" style="background: linear-gradient(to bottom, #AE1C28 33%, white 33%, white 66%, #21468B 66%);">
                       </div>
                       <h4 class="font-medium text-gray-800">Test KVK Relying Party (not yet functional)</h4>
                     </div>
                     <p class="text-gray-600 text-sm">Dutch Chamber of Commerce verification service</p>
-                  </a>
+                  </a> -->
 
                   <!-- German Relying Party -->
-                  <a href="https://servicekonto.test.governikus-eid.de/eudi-mercury-testclient/start" target="_blank" class="border border-gray-300 rounded-lg p-4 hover:bg-gray-50 transition cursor-pointer">
+                  <!-- <a href="https://servicekonto.test.governikus-eid.de/eudi-mercury-testclient/start" target="_blank" class="border border-gray-300 rounded-lg p-4 hover:bg-gray-50 transition cursor-pointer">
                     <div class="flex items-center mb-2">
                       <div class="w-6 h-4 overflow-hidden flex-shrink-0 mr-2 border border-gray-300" style="background: linear-gradient(to bottom, #000000 33%, #DD0000 33%, #DD0000 66%, #FFCE00 66%);">
                       </div>
                       <h4 class="font-medium text-gray-800">German Relying Party (not yet functional)</h4>
                     </div>
                     <p class="text-gray-600 text-sm">German verification service</p>
-                  </a>
+                  </a> -->
 
                   <!-- Polish Relying Party -->
-                  <a href="https://wallet.a-sit.at/" target="_blank" class="border border-gray-300 rounded-lg p-4 hover:bg-gray-50 transition cursor-pointer">
+                  <a href="https://demo-relying-party.pit.lukasiewicz.gov.pl/" target="_blank" class="border border-gray-300 rounded-lg p-4 hover:bg-gray-50 transition cursor-pointer">
                     <div class="flex items-center mb-2">
                       <div class="w-6 h-4 overflow-hidden flex-shrink-0 mr-2 border border-gray-300" style="background: linear-gradient(to bottom, white 50%, red 50%);">
                       </div>
-                      <h4 class="font-medium text-gray-800">Polish Relying Party (not yet functional)</h4>
+                      <h4 class="font-medium text-gray-800">Polish Relying Party</h4>
                     </div>
                     <p class="text-gray-600 text-sm">Polish verification service</p>
                   </a>
