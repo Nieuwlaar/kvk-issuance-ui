@@ -11,11 +11,7 @@
             <span class="sr-only">Home</span>
           </router-link>
           <p class="text-sm leading-6 text-black">
-            Pre-Authorization Flow (
-            <router-link to="/authorization-flow" class="underline hover:text-gray-600">
-              Authorization Flow here
-            </router-link>
-            ). Issuance based on <a href="https://github.com/eu-digital-identity-wallet/eudi-srv-web-issuing-eudiw-py/tags" class="underline hover:text-gray-600">eudi-srv-web-issuing-eudiw-py</a> 0.7.1 using OpenID4VCI draft 13 
+            Issuance based on <a href="https://github.com/eu-digital-identity-wallet/eudi-srv-web-issuing-eudiw-py/tags" class="underline hover:text-gray-600">eudi-srv-web-issuing-eudiw-py</a> 0.7.1. Verification based on OpenID4VP draft 21.
           </p>
         </div>
         
