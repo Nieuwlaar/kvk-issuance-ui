@@ -29,7 +29,7 @@
               <div class="ml-3">
                 <h3 class="text-sm font-medium text-red-800">{{ certificateError }}</h3>
                 <div class="mt-2 text-sm text-red-700">
-                  <p>Please request a new PID with family_name: Squarepants and given_name: Spongebob, birthdate should be 1 april 2025</p>
+                  <p>Please request a new PID which has SpongeBob SquarePants as its name.</p>
                 </div>
               </div>
             </div>
@@ -97,7 +97,42 @@
       >
         <div class="space-y-4">
           <h2 class="text-lg font-semibold">{{ selectedCompany ? selectedCompany.legal_person_name : 'Organization' }}</h2>
-          <p v-if="selectedCompany" class="text-sm text-gray-600">ID: {{ selectedCompany.legal_person_id }}</p>
+          
+          <!-- Credential Type Selector -->
+          <div v-if="!isLoading && !successData" class="flex justify-center space-x-4 border-b pb-4 mb-4">
+            <label class="flex items-center space-x-2 cursor-pointer">
+              <input type="radio" name="credentialType" value="power-of-representation" v-model="activeCredentialType" class="radio radio-primary radio-sm">
+              <span class="text-sm font-medium" :class="{'text-cyan-800': activeCredentialType === 'power-of-representation'}">Power of Representation</span>
+            </label>
+            <label class="flex items-center space-x-2 cursor-pointer">
+              <input type="radio" name="credentialType" value="company-registration" v-model="activeCredentialType" class="radio radio-primary radio-sm">
+              <span class="text-sm font-medium" :class="{'text-cyan-800': activeCredentialType === 'company-registration'}">Company Registration</span>
+            </label>
+          </div>
+          
+          <!-- Company Registration Optional Fields -->
+          <div v-if="!isLoading && !successData && activeCredentialType === 'company-registration'" class="space-y-3 border-b pb-4">
+            <div>
+              <label for="registration_number" class="block text-sm font-medium text-gray-700">Registration Number</label>
+              <input type="text" id="registration_number" v-model="companyRegistrationForm.registration_number" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-cyan-500 focus:ring-cyan-500 sm:text-sm">
+            </div>
+            <div>
+              <label for="establishment_date" class="block text-sm font-medium text-gray-700">Establishment Date</label>
+              <input type="date" id="establishment_date" v-model="companyRegistrationForm.establishment_date" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-cyan-500 focus:ring-cyan-500 sm:text-sm">
+            </div>
+          </div>
+          
+          <!-- Format Selector -->
+          <div v-if="!isLoading && !successData" class="flex justify-center space-x-4 border-b pb-4 mb-4">
+            <label class="flex items-center space-x-2 cursor-pointer">
+              <input type="radio" name="format" value="sd_jwt_vc" v-model="formatValue" class="radio radio-primary radio-sm">
+              <span class="text-sm font-medium" :class="{'text-cyan-800': formatValue === 'sd_jwt_vc'}">SD-JWT</span>
+            </label>
+            <label class="flex items-center space-x-2 cursor-pointer">
+              <input type="radio" name="format" value="mdoc" v-model="formatValue" class="radio radio-primary radio-sm">
+              <span class="text-sm font-medium" :class="{'text-cyan-800': formatValue === 'mdoc'}">mDoc</span>
+            </label>
+          </div>
           
           <!-- Loading Indicator -->
           <div v-if="isLoading" class="flex justify-center items-center h-48"> 
@@ -106,21 +141,11 @@
 
           <!-- Data Display Area -->
           <div v-else-if="successData" class="space-y-4">
-            <!-- Format Selector -->
-            <div class="flex justify-center space-x-4 border-b pb-4 mb-4">
-              <label class="flex items-center space-x-2 cursor-pointer">
-                <input type="radio" name="format" value="sd_jwt_vc" v-model="formData.format" class="radio radio-primary radio-sm">
-                <span class="text-sm font-medium" :class="{'text-cyan-800': formData.format === 'sd_jwt_vc'}">SD-JWT</span>
-              </label>
-              <label class="flex items-center space-x-2 cursor-pointer">
-                <input type="radio" name="format" value="mdoc" v-model="formData.format" class="radio radio-primary radio-sm">
-                <span class="text-sm font-medium" :class="{'text-cyan-800': formData.format === 'mdoc'}">mDoc</span>
-              </label>
-            </div>
-
-            <!-- QR Code and Transaction Info -->
             <div class="text-center">
-              <img :src="successData.qr_code" alt="PoR QR Code" class="mx-auto max-w-xs" />
+              <h3 class="text-md font-medium text-gray-900 mb-2">
+                {{ activeCredentialType === 'power-of-representation' ? 'Power of Representation' : 'Company Registration' }}
+              </h3>
+              <img :src="successData.qr_code" alt="Credential QR Code" class="mx-auto max-w-xs" />
               <p class="mt-2 text-xs text-gray-600">Transaction Code: {{ successData.transaction_code }}</p>
               <a :href="successData.eudiw_link" class="mt-2 text-sm text-cyan-800 hover:text-cyan-900 block">Open in Wallet App</a>
             </div>
@@ -150,7 +175,7 @@
             </button>
             <button 
               v-if="selectedCompany && !isLoading && !successData"
-              @click="requestPowerOfRepresentation" 
+              @click="requestSelectedCredential" 
               class="rounded-md bg-cyan-800 px-3.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-cyan-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-800"
             >
               Request Credential
@@ -174,11 +199,30 @@ const route = useRoute()
 const flowStore = useFlowStore()
 const isInFlow = ref(false)
 
-// Form state
-const formData = ref({
+// Form state for Power of Representation
+const porForm = ref({
   legal_person_identifier: '',
   legal_name: '',
   format: 'sd_jwt_vc'
+})
+
+// Form state for Company Registration with optional fields
+const companyRegistrationForm = ref({
+  legal_person_identifier: '',
+  legal_name: '',
+  format: 'sd_jwt_vc',
+  registration_number: '',
+  establishment_date: ''
+})
+
+// Active credential type and format
+const activeCredentialType = ref('power-of-representation')
+const formatValue = ref('sd_jwt_vc')
+
+// Watch for format changes and update both forms
+watch(formatValue, (newValue) => {
+  porForm.value.format = newValue
+  companyRegistrationForm.value.format = newValue
 })
 
 const isLoading = ref(false)
@@ -256,16 +300,22 @@ const fetchCompanyCertificates = async () => {
 // Open dialog when selecting a company
 const openDialog = (company) => {
   selectedCompany.value = company
-  formData.value.legal_person_identifier = company.legal_person_id
-  formData.value.legal_name = company.legal_person_name
+  
+  // Set basic info for both form types
+  porForm.value.legal_person_identifier = company.legal_person_id
+  porForm.value.legal_name = company.legal_person_name
+  
+  companyRegistrationForm.value.legal_person_identifier = company.legal_person_id
+  companyRegistrationForm.value.legal_name = company.legal_person_name
+  
+  // Reset other states
+  activeCredentialType.value = 'power-of-representation'
+  formatValue.value = 'sd_jwt_vc'
   error.value = null
   successData.value = null
   
   // Show dialog
   credentialDialogRef.value?.showModal()
-  
-  // Auto-request credential when dialog opens
-  requestPowerOfRepresentation()
 }
 
 // Close dialog
@@ -273,26 +323,14 @@ const closeDialog = () => {
   credentialDialogRef.value?.close()
 }
 
-// Watch for format change to reload credential with new format
-watch(() => formData.value.format, () => {
-  if (selectedCompany.value) {
-    requestPowerOfRepresentation()
-  }
-})
-
-onMounted(() => {
-  // Check if we're in the PoR flow
-  if (route.query.flow === 'por') {
-    isInFlow.value = true
-    flowStore.startFlow()
-    flowStore.setCurrentStep('authorization')
+// Function to request the currently selected credential type
+const requestSelectedCredential = async () => {
+  if (activeCredentialType.value === 'power-of-representation') {
+    await requestPowerOfRepresentation()
   } else {
-    isInFlow.value = false
+    await requestCompanyRegistration()
   }
-  
-  // Fetch company certificates
-  fetchCompanyCertificates()
-})
+}
 
 // Request Power of Representation
 const requestPowerOfRepresentation = async () => {
@@ -315,11 +353,7 @@ const requestPowerOfRepresentation = async () => {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${accessToken}`
       },
-      body: JSON.stringify({
-        legal_person_identifier: formData.value.legal_person_identifier,
-        legal_name: formData.value.legal_name,
-        format: formData.value.format
-      })
+      body: JSON.stringify(porForm.value)
     })
     
     if (!response.ok) {
@@ -345,6 +379,68 @@ const requestPowerOfRepresentation = async () => {
     isLoading.value = false
   }
 }
+
+// Request Company Registration
+const requestCompanyRegistration = async () => {
+  if (!selectedCompany.value) return
+  
+  isLoading.value = true
+  error.value = null
+  successData.value = null
+  
+  try {
+    // Get authorization token
+    const accessToken = localStorage.getItem('accessToken')
+    if (!accessToken) {
+      throw new Error('You must be logged in to request a Company Registration')
+    }
+    
+    const response = await fetch('https://kvk-issuance-service.nieuwlaar.com/rdw-niscy/company-registration', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`
+      },
+      body: JSON.stringify(companyRegistrationForm.value)
+    })
+    
+    if (!response.ok) {
+      const errorText = await response.text()
+      throw new Error(`Failed to request Company Registration: ${errorText}`)
+    }
+    
+    const data = await response.json()
+    
+    if (data.status === 'success' && data.data) {
+      successData.value = {
+        qr_code: data.data.qr_code,
+        transaction_code: data.data.transaction_code,
+        eudiw_link: data.data.eudiw_link
+      }
+    } else {
+      throw new Error('Invalid response from server')
+    }
+  } catch (err) {
+    console.error('Error in requestCompanyRegistration:', err)
+    error.value = err.message || 'An unexpected error occurred'
+  } finally {
+    isLoading.value = false
+  }
+}
+
+onMounted(() => {
+  // Check if we're in the PoR flow
+  if (route.query.flow === 'por') {
+    isInFlow.value = true
+    flowStore.startFlow()
+    flowStore.setCurrentStep('authorization')
+  } else {
+    isInFlow.value = false
+  }
+  
+  // Fetch company certificates
+  fetchCompanyCertificates()
+})
 </script>
 
 <style scoped>
