@@ -99,7 +99,7 @@
           <h2 class="text-lg font-semibold">{{ selectedCompany ? selectedCompany.legal_person_name : 'Organization' }}</h2>
           
           <!-- Credential Type Selector -->
-          <div v-if="!isLoading" class="flex justify-center space-x-4 border-b pb-4 mb-4">
+          <div v-if="!isInitialLoading" class="flex justify-center space-x-4 border-b pb-4 mb-4">
             <label class="flex items-center space-x-2 cursor-pointer">
               <input type="radio" name="credentialType" value="power-of-representation" v-model="activeCredentialType" class="radio radio-primary radio-sm">
               <span class="text-sm font-medium" :class="{'text-cyan-800': activeCredentialType === 'power-of-representation'}">Power of Representation</span>
@@ -111,7 +111,7 @@
           </div>
           
           <!-- Format Selector -->
-          <div v-if="!isLoading" class="flex justify-center space-x-4 border-b pb-4 mb-4">
+          <div v-if="!isInitialLoading" class="flex justify-center space-x-4 border-b pb-4 mb-4">
             <label class="flex items-center space-x-2 cursor-pointer">
               <input type="radio" name="format" value="sd_jwt_vc" v-model="formatValue" class="radio radio-primary radio-sm">
               <span class="text-sm font-medium" :class="{'text-cyan-800': formatValue === 'sd_jwt_vc'}">SD-JWT</span>
@@ -122,31 +122,32 @@
             </label>
           </div>
           
-          <!-- Loading Indicator -->
-          <div v-if="isLoading && !porData && !companyRegData" class="flex justify-center items-center h-48"> 
+          <!-- Initial Loading Indicator -->
+          <div v-if="isInitialLoading" class="flex justify-center items-center h-48"> 
             <div class="loader"></div>
+            <p class="ml-3 text-sm text-gray-600">Loading credentials...</p>
           </div>
 
           <!-- Data Display Area -->
           <div v-else class="space-y-4">
-            <div class="text-center" v-if="activeCredentialType === 'power-of-representation' && porData">
+            <div class="text-center" v-if="activeCredentialType === 'power-of-representation'">
               <h3 class="text-md font-medium text-gray-900 mb-2">Power of Representation</h3>
               <div v-if="isLoadingPor" class="flex justify-center py-4">
                 <div class="loader"></div>
               </div>
-              <template v-else>
+              <template v-else-if="porData">
                 <img :src="porData.qr_code" alt="Power of Representation QR Code" class="mx-auto max-w-xs" />
                 <p class="mt-2 text-xs text-gray-600">Transaction Code: {{ porData.transaction_code }}</p>
                 <a :href="porData.eudiw_link" class="mt-2 text-sm text-cyan-800 hover:text-cyan-900 block">Open in Wallet App</a>
               </template>
             </div>
             
-            <div class="text-center" v-if="activeCredentialType === 'company-registration' && companyRegData">
+            <div class="text-center" v-if="activeCredentialType === 'company-registration'">
               <h3 class="text-md font-medium text-gray-900 mb-2">Company Registration</h3>
               <div v-if="isLoadingCompanyReg" class="flex justify-center py-4">
                 <div class="loader"></div>
               </div>
-              <template v-else>
+              <template v-else-if="companyRegData">
                 <img :src="companyRegData.qr_code" alt="Company Registration QR Code" class="mx-auto max-w-xs" />
                 <p class="mt-2 text-xs text-gray-600">Transaction Code: {{ companyRegData.transaction_code }}</p>
                 <a :href="companyRegData.eudiw_link" class="mt-2 text-sm text-cyan-800 hover:text-cyan-900 block">Open in Wallet App</a>
@@ -244,6 +245,7 @@ watch(activeCredentialType, (newValue) => {
 })
 
 const isLoading = ref(false)
+const isInitialLoading = ref(false)
 const isLoadingPor = ref(false)
 const isLoadingCompanyReg = ref(false)
 const error = ref(null)
@@ -336,12 +338,19 @@ const openDialog = (company) => {
   porData.value = null
   companyRegData.value = null
   
+  // Set initial loading state
+  isInitialLoading.value = true
+  
   // Show dialog
   credentialDialogRef.value?.showModal()
   
   // Auto-request both credential types
-  requestPowerOfRepresentation()
-  requestCompanyRegistration()
+  Promise.all([
+    requestPowerOfRepresentation(),
+    requestCompanyRegistration()
+  ]).finally(() => {
+    isInitialLoading.value = false
+  })
 }
 
 // Close dialog
