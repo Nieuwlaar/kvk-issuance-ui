@@ -99,7 +99,7 @@
           <h2 class="text-lg font-semibold">{{ selectedCompany ? selectedCompany.legal_person_name : 'Organization' }}</h2>
           
           <!-- Credential Type Selector -->
-          <div v-if="!isLoading && !successData" class="flex justify-center space-x-4 border-b pb-4 mb-4">
+          <div v-if="!isLoading" class="flex justify-center space-x-4 border-b pb-4 mb-4">
             <label class="flex items-center space-x-2 cursor-pointer">
               <input type="radio" name="credentialType" value="power-of-representation" v-model="activeCredentialType" class="radio radio-primary radio-sm">
               <span class="text-sm font-medium" :class="{'text-cyan-800': activeCredentialType === 'power-of-representation'}">Power of Representation</span>
@@ -110,20 +110,8 @@
             </label>
           </div>
           
-          <!-- Company Registration Optional Fields -->
-          <div v-if="!isLoading && !successData && activeCredentialType === 'company-registration'" class="space-y-3 border-b pb-4">
-            <div>
-              <label for="registration_number" class="block text-sm font-medium text-gray-700">Registration Number</label>
-              <input type="text" id="registration_number" v-model="companyRegistrationForm.registration_number" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-cyan-500 focus:ring-cyan-500 sm:text-sm">
-            </div>
-            <div>
-              <label for="establishment_date" class="block text-sm font-medium text-gray-700">Establishment Date</label>
-              <input type="date" id="establishment_date" v-model="companyRegistrationForm.establishment_date" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-cyan-500 focus:ring-cyan-500 sm:text-sm">
-            </div>
-          </div>
-          
           <!-- Format Selector -->
-          <div v-if="!isLoading && !successData" class="flex justify-center space-x-4 border-b pb-4 mb-4">
+          <div v-if="!isLoading" class="flex justify-center space-x-4 border-b pb-4 mb-4">
             <label class="flex items-center space-x-2 cursor-pointer">
               <input type="radio" name="format" value="sd_jwt_vc" v-model="formatValue" class="radio radio-primary radio-sm">
               <span class="text-sm font-medium" :class="{'text-cyan-800': formatValue === 'sd_jwt_vc'}">SD-JWT</span>
@@ -135,24 +123,39 @@
           </div>
           
           <!-- Loading Indicator -->
-          <div v-if="isLoading" class="flex justify-center items-center h-48"> 
+          <div v-if="isLoading && !porData && !companyRegData" class="flex justify-center items-center h-48"> 
             <div class="loader"></div>
           </div>
 
           <!-- Data Display Area -->
-          <div v-else-if="successData" class="space-y-4">
-            <div class="text-center">
-              <h3 class="text-md font-medium text-gray-900 mb-2">
-                {{ activeCredentialType === 'power-of-representation' ? 'Power of Representation' : 'Company Registration' }}
-              </h3>
-              <img :src="successData.qr_code" alt="Credential QR Code" class="mx-auto max-w-xs" />
-              <p class="mt-2 text-xs text-gray-600">Transaction Code: {{ successData.transaction_code }}</p>
-              <a :href="successData.eudiw_link" class="mt-2 text-sm text-cyan-800 hover:text-cyan-900 block">Open in Wallet App</a>
+          <div v-else class="space-y-4">
+            <div class="text-center" v-if="activeCredentialType === 'power-of-representation' && porData">
+              <h3 class="text-md font-medium text-gray-900 mb-2">Power of Representation</h3>
+              <div v-if="isLoadingPor" class="flex justify-center py-4">
+                <div class="loader"></div>
+              </div>
+              <template v-else>
+                <img :src="porData.qr_code" alt="Power of Representation QR Code" class="mx-auto max-w-xs" />
+                <p class="mt-2 text-xs text-gray-600">Transaction Code: {{ porData.transaction_code }}</p>
+                <a :href="porData.eudiw_link" class="mt-2 text-sm text-cyan-800 hover:text-cyan-900 block">Open in Wallet App</a>
+              </template>
+            </div>
+            
+            <div class="text-center" v-if="activeCredentialType === 'company-registration' && companyRegData">
+              <h3 class="text-md font-medium text-gray-900 mb-2">Company Registration</h3>
+              <div v-if="isLoadingCompanyReg" class="flex justify-center py-4">
+                <div class="loader"></div>
+              </div>
+              <template v-else>
+                <img :src="companyRegData.qr_code" alt="Company Registration QR Code" class="mx-auto max-w-xs" />
+                <p class="mt-2 text-xs text-gray-600">Transaction Code: {{ companyRegData.transaction_code }}</p>
+                <a :href="companyRegData.eudiw_link" class="mt-2 text-sm text-cyan-800 hover:text-cyan-900 block">Open in Wallet App</a>
+              </template>
             </div>
           </div>
           
           <!-- Error Display -->
-          <div v-else-if="error" class="rounded-md bg-red-50 p-4">
+          <div v-if="error" class="rounded-md bg-red-50 p-4 mt-4">
             <div class="flex">
               <div class="flex-shrink-0">
                 <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -166,19 +169,12 @@
           </div>
           
           <!-- Buttons -->
-          <div class="flex justify-between mt-4">
+          <div class="flex justify-end mt-4">
             <button 
               @click="closeDialog"
               class="rounded-md bg-gray-200 px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-300"
             >
               Close
-            </button>
-            <button 
-              v-if="selectedCompany && !isLoading && !successData"
-              @click="requestSelectedCredential" 
-              class="rounded-md bg-cyan-800 px-3.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-cyan-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-800"
-            >
-              Request Credential
             </button>
           </div>
         </div>
@@ -211,23 +207,48 @@ const companyRegistrationForm = ref({
   legal_person_identifier: '',
   legal_name: '',
   format: 'sd_jwt_vc',
-  registration_number: '',
-  establishment_date: ''
+  activity_description: "The preparation and sale of Krabby Patties.",
+  admin_unit_L1: "Bikini Bottom",
+  company_activity: "5610",
+  company_contact_data: "+310201234567",
+  company_status: "Active"
 })
 
 // Active credential type and format
 const activeCredentialType = ref('power-of-representation')
 const formatValue = ref('sd_jwt_vc')
 
-// Watch for format changes and update both forms
+// Watch for format changes and update both forms then refresh credentials
 watch(formatValue, (newValue) => {
   porForm.value.format = newValue
   companyRegistrationForm.value.format = newValue
+  
+  // Refresh the active credential with the new format
+  if (selectedCompany.value) {
+    if (activeCredentialType.value === 'power-of-representation') {
+      requestPowerOfRepresentation()
+    } else {
+      requestCompanyRegistration() 
+    }
+  }
+})
+
+// Watch for credential type changes to show the correct data
+watch(activeCredentialType, (newValue) => {
+  // If we switch between credential types and don't have data for the new one, fetch it
+  if (newValue === 'power-of-representation' && !porData.value && selectedCompany.value) {
+    requestPowerOfRepresentation()
+  } else if (newValue === 'company-registration' && !companyRegData.value && selectedCompany.value) {
+    requestCompanyRegistration()
+  }
 })
 
 const isLoading = ref(false)
+const isLoadingPor = ref(false)
+const isLoadingCompanyReg = ref(false)
 const error = ref(null)
-const successData = ref(null)
+const porData = ref(null)
+const companyRegData = ref(null)
 const credentialDialogRef = ref(null)
 
 // Company certificates state
@@ -312,10 +333,15 @@ const openDialog = (company) => {
   activeCredentialType.value = 'power-of-representation'
   formatValue.value = 'sd_jwt_vc'
   error.value = null
-  successData.value = null
+  porData.value = null
+  companyRegData.value = null
   
   // Show dialog
   credentialDialogRef.value?.showModal()
+  
+  // Auto-request both credential types
+  requestPowerOfRepresentation()
+  requestCompanyRegistration()
 }
 
 // Close dialog
@@ -323,22 +349,12 @@ const closeDialog = () => {
   credentialDialogRef.value?.close()
 }
 
-// Function to request the currently selected credential type
-const requestSelectedCredential = async () => {
-  if (activeCredentialType.value === 'power-of-representation') {
-    await requestPowerOfRepresentation()
-  } else {
-    await requestCompanyRegistration()
-  }
-}
-
 // Request Power of Representation
 const requestPowerOfRepresentation = async () => {
   if (!selectedCompany.value) return
   
-  isLoading.value = true
+  isLoadingPor.value = true
   error.value = null
-  successData.value = null
   
   try {
     // Get authorization token
@@ -364,7 +380,7 @@ const requestPowerOfRepresentation = async () => {
     const data = await response.json()
     
     if (data.status === 'success' && data.data) {
-      successData.value = {
+      porData.value = {
         qr_code: data.data.qr_code,
         transaction_code: data.data.transaction_code,
         eudiw_link: data.data.eudiw_link
@@ -376,7 +392,7 @@ const requestPowerOfRepresentation = async () => {
     console.error('Error in requestPowerOfRepresentation:', err)
     error.value = err.message || 'An unexpected error occurred'
   } finally {
-    isLoading.value = false
+    isLoadingPor.value = false
   }
 }
 
@@ -384,9 +400,8 @@ const requestPowerOfRepresentation = async () => {
 const requestCompanyRegistration = async () => {
   if (!selectedCompany.value) return
   
-  isLoading.value = true
+  isLoadingCompanyReg.value = true
   error.value = null
-  successData.value = null
   
   try {
     // Get authorization token
@@ -412,7 +427,7 @@ const requestCompanyRegistration = async () => {
     const data = await response.json()
     
     if (data.status === 'success' && data.data) {
-      successData.value = {
+      companyRegData.value = {
         qr_code: data.data.qr_code,
         transaction_code: data.data.transaction_code,
         eudiw_link: data.data.eudiw_link
@@ -424,7 +439,7 @@ const requestCompanyRegistration = async () => {
     console.error('Error in requestCompanyRegistration:', err)
     error.value = err.message || 'An unexpected error occurred'
   } finally {
-    isLoading.value = false
+    isLoadingCompanyReg.value = false
   }
 }
 
