@@ -55,6 +55,14 @@
                     <p class="text-gray-600 text-sm">Polish verification service</p>
                   </a>
 
+                  <!-- Google Relying Party -->
+                  <a href="https://google.com" target="_blank" class="border border-gray-300 rounded-lg p-4 hover:bg-gray-50 transition cursor-pointer">
+                    <div class="flex items-center mb-2">
+                      <h4 class="font-medium text-gray-800">Google Relying Party</h4>
+                    </div>
+                    <p class="text-gray-600 text-sm">Google verification service</p>
+                  </a>
+
                   <!-- Dummy Relying Party -->
                   <!-- <div class="border border-gray-300 rounded-lg p-4 bg-gray-50">
                     <div class="flex items-center mb-2">
