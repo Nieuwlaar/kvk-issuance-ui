@@ -75,9 +75,9 @@
               Back to Authentication
             </router-link>
             <div class="flex-grow"></div>
-            <!-- Continue button when in flow and data is ready -->
+            <!-- Continue button when in flow -->
             <router-link 
-              v-if="isInFlow && successData" 
+              v-if="isInFlow" 
               to="/relying-party?flow=por"
               class="rounded-md bg-cyan-800 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-cyan-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-800"
             >
