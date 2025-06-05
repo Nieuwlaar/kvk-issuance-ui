@@ -38,7 +38,7 @@
                   <!-- German Relying Party -->
                   <a href="https://servicekonto.test.governikus-eid.de/eudi-mercury-testclient/start" target="_blank" class="border border-gray-300 rounded-lg p-4 hover:bg-gray-50 transition cursor-pointer">
                     <div class="flex items-center mb-2">
-                      <Icon :icon="flagIcons.germany" class="w-6 h-4 mr-2" />
+                      <Icon :icon="flagIcons.germany" width="24" height="24" class="mr-2" />
                       <h4 class="font-medium text-gray-800">German Relying Party</h4>
                     </div>
                     <p class="text-gray-600 text-sm">German verification service</p>
@@ -47,7 +47,7 @@
                   <!-- Austrian Official Relying Party -->
                   <a href="https://pp-q.sdg-oop.gv.at/potential" target="_blank" class="border border-gray-300 rounded-lg p-4 hover:bg-gray-50 transition cursor-pointer">
                     <div class="flex items-center mb-2">
-                      <Icon :icon="flagIcons.austria" class="w-6 h-4 mr-2" />
+                      <Icon :icon="flagIcons.austria" width="24" height="24" class="mr-2" />
                       <h4 class="font-medium text-gray-800">Austrian Official Relying Party</h4>
                     </div>
                     <p class="text-gray-600 text-sm">Austrian official verification service</p>
@@ -56,7 +56,7 @@
                   <!-- Austrian Test Relying Party -->
                   <a href="https://apps.egiz.gv.at/customverifier/por.html" target="_blank" class="border border-gray-300 rounded-lg p-4 hover:bg-gray-50 transition cursor-pointer">
                     <div class="flex items-center mb-2">
-                      <Icon :icon="flagIcons.austria" class="w-6 h-4 mr-2" />
+                      <Icon :icon="flagIcons.austria" width="24" height="24" class="mr-2" />
                       <h4 class="font-medium text-gray-800">Austrian Test Relying Party</h4>
                     </div>
                     <p class="text-gray-600 text-sm">Austrian test verification service</p>
@@ -65,7 +65,7 @@
                   <!-- Slovenian Relying Party -->
                   <a href="https://sicas.setcce.si/idpw/login?policy=IDP-W&service=https%3A%2F%2Fsicas.gov.si%2Fbl%2FhandleIdpResponse%3FrelayState%3D29f7b1ba-caec-4536-8658-90231e2d1261&lang=si&spName=eUPRAVA&addAtt=emso%2Cdrzava%2Cnaslov%2Cdatum_roj" target="_blank" class="border border-gray-300 rounded-lg p-4 hover:bg-gray-50 transition cursor-pointer">
                     <div class="flex items-center mb-2">
-                      <Icon :icon="flagIcons.slovenia" class="w-6 h-4 mr-2" />
+                      <Icon :icon="flagIcons.slovenia" width="24" height="24" class="mr-2" />
                       <h4 class="font-medium text-gray-800">Slovenian Relying Party</h4>
                     </div>
                     <p class="text-gray-600 text-sm">Slovenian verification service</p>
@@ -74,7 +74,7 @@
                   <!-- French Relying Party -->
                   <a href="https://api.playground.france-identite.gouv.fr/docaposte/console-icp/" target="_blank" class="border border-gray-300 rounded-lg p-4 hover:bg-gray-50 transition cursor-pointer">
                     <div class="flex items-center mb-2">
-                      <Icon :icon="flagIcons.france" class="w-6 h-4 mr-2" />
+                      <Icon :icon="flagIcons.france" width="24" height="24" class="mr-2" />
                       <h4 class="font-medium text-gray-800">French Relying Party</h4>
                     </div>
                     <p class="text-gray-600 text-sm">French verification service</p>
@@ -83,7 +83,7 @@
                   <!-- Portuguese Relying Party -->
                   <a href="https://eudiwpotential-driving.demo.arubapec.it/uc1" target="_blank" class="border border-gray-300 rounded-lg p-4 hover:bg-gray-50 transition cursor-pointer">
                     <div class="flex items-center mb-2">
-                      <Icon :icon="flagIcons.portugal" class="w-6 h-4 mr-2" />
+                      <Icon :icon="flagIcons.portugal" width="24" height="24" class="mr-2" />
                       <h4 class="font-medium text-gray-800">Portuguese Relying Party</h4>
                     </div>
                     <p class="text-gray-600 text-sm">Portuguese verification service</p>
@@ -92,7 +92,7 @@
                   <!-- Polish Relying Party -->
                   <a href="https://demo-relying-party.pit.lukasiewicz.gov.pl/" target="_blank" class="border border-gray-300 rounded-lg p-4 hover:bg-gray-50 transition cursor-pointer">
                     <div class="flex items-center mb-2">
-                      <Icon :icon="flagIcons.poland" class="w-6 h-4 mr-2" />
+                      <Icon :icon="flagIcons.poland" width="24" height="24" class="mr-2" />
                       <h4 class="font-medium text-gray-800">Polish Relying Party</h4>
                     </div>
                     <p class="text-gray-600 text-sm">Polish verification service</p>
@@ -148,12 +148,12 @@ const isInFlow = ref(false)
 
 // Flag icon names
 const flagIcons = {
-  germany: 'flag:de-4x3',
-  austria: 'flag:at-4x3',
-  slovenia: 'flag:si-4x3',
-  france: 'flag:fr-4x3',
-  portugal: 'flag:pt-4x3',
-  poland: 'flag:pl-4x3'
+  germany: 'circle-flags:de',
+  austria: 'circle-flags:at',
+  slovenia: 'circle-flags:si',
+  france: 'circle-flags:fr',
+  portugal: 'circle-flags:pt',
+  poland: 'circle-flags:pl'
 }
 
 onMounted(() => {
@@ -169,11 +169,8 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.flag-icon {
-  width: 24px;
-  height: 16px;
+:deep(.iconify) {
   border: 1px solid #e5e7eb;
-  border-radius: 2px;
-  object-fit: cover;
+  border-radius: 50%;
 }
 </style> 
