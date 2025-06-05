@@ -40,9 +40,59 @@
                     <div class="flex items-center mb-2">
                       <div class="w-6 h-4 overflow-hidden flex-shrink-0 mr-2 border border-gray-300" style="background: linear-gradient(to bottom, #000000 33%, #DD0000 33%, #DD0000 66%, #FFCE00 66%);">
                       </div>
-                      <h4 class="font-medium text-gray-800">German Relying Party (not yet functional)</h4>
+                      <h4 class="font-medium text-gray-800">German Relying Party</h4>
                     </div>
                     <p class="text-gray-600 text-sm">German verification service</p>
+                  </a>
+
+                  <!-- Austrian Official Relying Party -->
+                  <a href="https://pp-q.sdg-oop.gv.at/potential" target="_blank" class="border border-gray-300 rounded-lg p-4 hover:bg-gray-50 transition cursor-pointer">
+                    <div class="flex items-center mb-2">
+                      <div class="w-6 h-4 overflow-hidden flex-shrink-0 mr-2 border border-gray-300" style="background: linear-gradient(to bottom, red 50%, white 50%);">
+                      </div>
+                      <h4 class="font-medium text-gray-800">Austrian Official Relying Party</h4>
+                    </div>
+                    <p class="text-gray-600 text-sm">Austrian official verification service</p>
+                  </a>
+
+                  <!-- Austrian Test Relying Party -->
+                  <a href="https://apps.egiz.gv.at/customverifier/por.html" target="_blank" class="border border-gray-300 rounded-lg p-4 hover:bg-gray-50 transition cursor-pointer">
+                    <div class="flex items-center mb-2">
+                      <div class="w-6 h-4 overflow-hidden flex-shrink-0 mr-2 border border-gray-300" style="background: linear-gradient(to bottom, red 50%, white 50%);">
+                      </div>
+                      <h4 class="font-medium text-gray-800">Austrian Test Relying Party</h4>
+                    </div>
+                    <p class="text-gray-600 text-sm">Austrian test verification service</p>
+                  </a>
+
+                  <!-- Slovenian Relying Party -->
+                  <a href="https://sicas.setcce.si/idpw/login?policy=IDP-W&service=https%3A%2F%2Fsicas.gov.si%2Fbl%2FhandleIdpResponse%3FrelayState%3D29f7b1ba-caec-4536-8658-90231e2d1261&lang=si&spName=eUPRAVA&addAtt=emso%2Cdrzava%2Cnaslov%2Cdatum_roj" target="_blank" class="border border-gray-300 rounded-lg p-4 hover:bg-gray-50 transition cursor-pointer">
+                    <div class="flex items-center mb-2">
+                      <div class="w-6 h-4 overflow-hidden flex-shrink-0 mr-2 border border-gray-300" style="background: linear-gradient(to bottom, white 33%, #005CE6 33%, #005CE6 66%, #ED1C24 66%);">
+                      </div>
+                      <h4 class="font-medium text-gray-800">Slovenian Relying Party</h4>
+                    </div>
+                    <p class="text-gray-600 text-sm">Slovenian verification service</p>
+                  </a>
+
+                  <!-- French Relying Party -->
+                  <a href="https://api.playground.france-identite.gouv.fr/docaposte/console-icp/" target="_blank" class="border border-gray-300 rounded-lg p-4 hover:bg-gray-50 transition cursor-pointer">
+                    <div class="flex items-center mb-2">
+                      <div class="w-6 h-4 overflow-hidden flex-shrink-0 mr-2 border border-gray-300" style="background: linear-gradient(to right, #002395 33%, white 33%, white 66%, #ED2939 66%);">
+                      </div>
+                      <h4 class="font-medium text-gray-800">French Relying Party</h4>
+                    </div>
+                    <p class="text-gray-600 text-sm">French verification service</p>
+                  </a>
+
+                  <!-- Portuguese Relying Party -->
+                  <a href="https://eudiwpotential-driving.demo.arubapec.it/uc1" target="_blank" class="border border-gray-300 rounded-lg p-4 hover:bg-gray-50 transition cursor-pointer">
+                    <div class="flex items-center mb-2">
+                      <div class="w-6 h-4 overflow-hidden flex-shrink-0 mr-2 border border-gray-300" style="background: linear-gradient(to right, #006600 40%, #FF0000 40%, #FF0000 60%, #006600 60%);">
+                      </div>
+                      <h4 class="font-medium text-gray-800">Portuguese Relying Party</h4>
+                    </div>
+                    <p class="text-gray-600 text-sm">Portuguese verification service</p>
                   </a>
 
                   <!-- Polish Relying Party -->
@@ -56,22 +106,12 @@
                   </a>
 
                   <!-- Google Relying Party -->
-                  <a href="https://google.com" target="_blank" class="border border-gray-300 rounded-lg p-4 hover:bg-gray-50 transition cursor-pointer">
+                  <!-- <a href="https://google.com" target="_blank" class="border border-gray-300 rounded-lg p-4 hover:bg-gray-50 transition cursor-pointer">
                     <div class="flex items-center mb-2">
                       <h4 class="font-medium text-gray-800">Google Relying Party</h4>
                     </div>
                     <p class="text-gray-600 text-sm">Google verification service</p>
-                  </a>
-
-                  <!-- Dummy Relying Party -->
-                  <!-- <div class="border border-gray-300 rounded-lg p-4 bg-gray-50">
-                    <div class="flex items-center mb-2">
-                      <div class="w-6 h-4 overflow-hidden flex-shrink-0 mr-2 border border-gray-300" style="background: linear-gradient(to bottom, white 50%, red 50%);">
-                      </div>
-                      <h4 class="font-medium text-gray-400">More Relying Parties Coming Soon</h4>
-                    </div>
-                    <p class="text-gray-400 text-sm">Additional verification services will be added</p>
-                  </div> -->
+                  </a> -->
                 </div>
               </div>
             </div>

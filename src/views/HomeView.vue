@@ -52,6 +52,13 @@
             >
               Download Wallet & Issue Test PID
             </router-link>
+            <a
+              href="https://kvk-issuance-ui.nieuwlaar.com/relying-party"
+              target="_blank"
+              class="rounded-md bg-white px-3.5 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 text-center"
+            >
+              List of Relying Parties
+            </a>
           </nav>
         </div>
       </main>

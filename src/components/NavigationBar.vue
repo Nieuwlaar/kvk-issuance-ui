@@ -12,6 +12,8 @@
           </router-link>
           <p class="text-sm leading-6 text-black">
             Issuance based on <a href="https://github.com/eu-digital-identity-wallet/eudi-srv-web-issuing-eudiw-py/tags" class="underline hover:text-gray-600">eudi-srv-web-issuing-eudiw-py</a> 0.7.1. Verification based on OpenID4VP draft 21.
+            <span class="mx-2">|</span>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSewSCE3b2MdNk6sEmkG_g6RDPwk9uNDMq4hLAIDVVQFHXtjQw/viewform?usp=dialog" class="underline hover:text-gray-600" target="_blank">Provide Feedback</a>
           </p>
         </div>
         
