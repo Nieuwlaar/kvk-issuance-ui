@@ -38,7 +38,7 @@
                   <!-- German Relying Party -->
                   <a href="https://servicekonto.test.governikus-eid.de/eudi-mercury-testclient/start" target="_blank" class="border border-gray-300 rounded-lg p-4 hover:bg-gray-50 transition cursor-pointer">
                     <div class="flex items-center mb-2">
-                      <country-flag country="de" size="small" class="mr-2" />
+                      <country-flag country="de" size="small" class="mr-3" />
                       <h4 class="font-medium text-gray-800">German Relying Party</h4>
                     </div>
                     <p class="text-gray-600 text-sm">German verification service</p>
@@ -47,7 +47,7 @@
                   <!-- Austrian Official Relying Party -->
                   <a href="https://pp-q.sdg-oop.gv.at/potential" target="_blank" class="border border-gray-300 rounded-lg p-4 hover:bg-gray-50 transition cursor-pointer">
                     <div class="flex items-center mb-2">
-                      <country-flag country="at" size="small" class="mr-2" />
+                      <country-flag country="at" size="small" class="mr-3" />
                       <h4 class="font-medium text-gray-800">Austrian Official Relying Party</h4>
                     </div>
                     <p class="text-gray-600 text-sm">Austrian official verification service</p>
@@ -56,7 +56,7 @@
                   <!-- Austrian Test Relying Party -->
                   <a href="https://apps.egiz.gv.at/customverifier/por.html" target="_blank" class="border border-gray-300 rounded-lg p-4 hover:bg-gray-50 transition cursor-pointer">
                     <div class="flex items-center mb-2">
-                      <country-flag country="at" size="small" class="mr-2" />
+                      <country-flag country="at" size="small" class="mr-3" />
                       <h4 class="font-medium text-gray-800">Austrian Test Relying Party</h4>
                     </div>
                     <p class="text-gray-600 text-sm">Austrian test verification service</p>
@@ -65,25 +65,25 @@
                   <!-- Slovenian Relying Party -->
                   <a href="https://sicas.setcce.si/idpw/login?policy=IDP-W&service=https%3A%2F%2Fsicas.gov.si%2Fbl%2FhandleIdpResponse%3FrelayState%3D29f7b1ba-caec-4536-8658-90231e2d1261&lang=si&spName=eUPRAVA&addAtt=emso%2Cdrzava%2Cnaslov%2Cdatum_roj" target="_blank" class="border border-gray-300 rounded-lg p-4 hover:bg-gray-50 transition cursor-pointer">
                     <div class="flex items-center mb-2">
-                      <country-flag country="si" size="small" class="mr-2" />
+                      <country-flag country="si" size="small" class="mr-3" />
                       <h4 class="font-medium text-gray-800">Slovenian Relying Party</h4>
                     </div>
                     <p class="text-gray-600 text-sm">Slovenian verification service</p>
                   </a>
 
                   <!-- French Relying Party -->
-                  <a href="https://api.playground.france-identite.gouv.fr/docaposte/console-icp/" target="_blank" class="border border-gray-300 rounded-lg p-4 hover:bg-gray-50 transition cursor-pointer">
+                  <!-- <a href="https://api.playground.france-identite.gouv.fr/docaposte/console-icp/" target="_blank" class="border border-gray-300 rounded-lg p-4 hover:bg-gray-50 transition cursor-pointer">
                     <div class="flex items-center mb-2">
-                      <country-flag country="fr" size="small" class="mr-2" />
+                      <country-flag country="fr" size="small" class="mr-3" />
                       <h4 class="font-medium text-gray-800">French Relying Party</h4>
                     </div>
                     <p class="text-gray-600 text-sm">French verification service</p>
-                  </a>
+                  </a> -->
 
                   <!-- Portuguese Relying Party -->
                   <a href="https://eudiwpotential-driving.demo.arubapec.it/uc1" target="_blank" class="border border-gray-300 rounded-lg p-4 hover:bg-gray-50 transition cursor-pointer">
                     <div class="flex items-center mb-2">
-                      <country-flag country="pt" size="small" class="mr-2" />
+                      <country-flag country="pt" size="small" class="mr-3" />
                       <h4 class="font-medium text-gray-800">Portuguese Relying Party</h4>
                     </div>
                     <p class="text-gray-600 text-sm">Portuguese verification service</p>
@@ -92,7 +92,7 @@
                   <!-- Polish Relying Party -->
                   <a href="https://demo-relying-party.pit.lukasiewicz.gov.pl/" target="_blank" class="border border-gray-300 rounded-lg p-4 hover:bg-gray-50 transition cursor-pointer">
                     <div class="flex items-center mb-2">
-                      <country-flag country="pl" size="small" class="mr-2" />
+                      <country-flag country="pl" size="small" class="mr-3" />
                       <h4 class="font-medium text-gray-800">Polish Relying Party</h4>
                     </div>
                     <p class="text-gray-600 text-sm">Polish verification service</p>
