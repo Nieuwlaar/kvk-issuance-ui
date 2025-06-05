@@ -66,6 +66,7 @@
             <span class="text-sm font-medium text-gray-700">Login</span>
           </router-link>
         </div>
+        </div>
       </div>
   
       <header class="bg-white">
@@ -112,6 +113,22 @@
                       Logout
                     </button>
                   </div>
+                  <router-link 
+                    v-if="!isAuthenticated" 
+                    to="/login" 
+                    class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                  >
+                    Login
+                  </router-link>
+                  <div v-else class="py-2.5 px-3">
+                    <p class="text-base font-medium">{{ userData.given_name }} {{ userData.family_name }}</p>
+                    <button 
+                      @click="logout" 
+                      class="mt-2 text-sm text-red-600 hover:text-red-800"
+                    >
+                      Logout
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -129,6 +146,7 @@
   </template>
   
   <script setup>
+  import { ref, onMounted, onUnmounted, watch } from 'vue'
   import { ref, onMounted, onUnmounted, watch } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { useRouter } from 'vue-router'
@@ -150,9 +168,18 @@
     GlobeAltIcon,
     UserIcon,
     HomeIcon
+    UserIcon,
+    HomeIcon
   } from '@heroicons/vue/24/outline'
   
   const mobileMenuOpen = ref(false)
+  const showProfileMenu = ref(false)
+  const isAuthenticated = ref(false)
+  const userData = ref({
+    given_name: '',
+    family_name: '',
+    birth_date: ''
+  })
   const showProfileMenu = ref(false)
   const isAuthenticated = ref(false)
   const userData = ref({
@@ -271,6 +298,113 @@
     checkAuthenticationStatus()
   })
   
+  // Check authentication status on component mount
+  onMounted(() => {
+    checkAuthenticationStatus()
+    
+    // Add click outside listener to close profile menu
+    document.addEventListener('click', handleClickOutside)
+  })
+  
+  // Cleanup event listener on component unmount
+  onUnmounted(() => {
+    document.removeEventListener('click', handleClickOutside)
+  })
+  
+  // Handle clicks outside the profile menu to close it
+  const handleClickOutside = (event) => {
+    // Get profile button element (the toggle button)
+    const profileButton = document.querySelector('.profile-toggle-button')
+    const profileMenu = document.querySelector('.profile-menu')
+    
+    // Check if click is outside both the menu and the toggle button
+    if (profileMenu && 
+        !profileMenu.contains(event.target) && 
+        (!profileButton || !profileButton.contains(event.target)) && 
+        showProfileMenu.value) {
+      showProfileMenu.value = false
+    }
+  }
+  
+  // Toggle profile menu visibility
+  const toggleProfileMenu = (event) => {
+    // Prevent event from bubbling to document click handler
+    event.stopPropagation()
+    showProfileMenu.value = !showProfileMenu.value
+  }
+  
+  // Check if user is authenticated
+  const checkAuthenticationStatus = async () => {
+    const accessToken = localStorage.getItem('accessToken')
+    
+    if (!accessToken) {
+      isAuthenticated.value = false
+      userData.value = { given_name: '', family_name: '', birth_date: '' }
+      return
+    }
+    
+    try {
+      const response = await fetch('https://kvk-issuance-service.nieuwlaar.com/rdw-niscy/auth/validate', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      })
+      
+      if (response.ok) {
+        const data = await response.json()
+        isAuthenticated.value = true
+        userData.value = {
+          given_name: data.given_name || '',
+          family_name: data.family_name || '',
+          birth_date: data.birth_date || ''
+        }
+      } else {
+        // Token invalid or expired
+        isAuthenticated.value = false
+        localStorage.removeItem('accessToken')
+        localStorage.removeItem('refreshToken')
+      }
+    } catch (err) {
+      console.error('Error validating token:', err)
+      isAuthenticated.value = false
+    }
+  }
+  
+  // Logout function
+  const logout = async () => {
+    try {
+      const accessToken = localStorage.getItem('accessToken')
+      
+      if (accessToken) {
+        await fetch('https://kvk-issuance-service.nieuwlaar.com/rdw-niscy/auth/logout', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          }
+        })
+      }
+    } catch (err) {
+      console.error('Error during logout:', err)
+    } finally {
+      localStorage.removeItem('accessToken')
+      localStorage.removeItem('refreshToken')
+      isAuthenticated.value = false
+      userData.value = { given_name: '', family_name: '', birth_date: '' }
+      showProfileMenu.value = false
+      
+      // Redirect to login if on a protected page
+      if (router.currentRoute.value.meta.requiresAuth) {
+        router.push('/login')
+      }
+    }
+  }
+  
+  // Watch for route changes to update auth status
+  watch(() => router.currentRoute.value, () => {
+    checkAuthenticationStatus()
+  })
+  
   const changeLanguage = () => {
     locale.value = locale.value === 'en' ? 'nl' : 'en'
     console.log('Locale changed to:', locale.value)
@@ -280,6 +414,20 @@
     router.push({ path: '/' })
   }
   </script>
+
+  <style scoped>
+  /* Add some transitions for smooth UI */
+  .profile-menu-enter-active,
+  .profile-menu-leave-active {
+    transition: opacity 0.2s, transform 0.2s;
+  }
+  
+  .profile-menu-enter-from,
+  .profile-menu-leave-to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  </style>
 
   <style scoped>
   /* Add some transitions for smooth UI */
