@@ -11,13 +11,16 @@
   "dependencies": {
     "@headlessui/vue": "^1.7.16",
     "@heroicons/vue": "^2.0.18",
+    "@iconify/vue": "^5.0.0",
     "@tailwindcss/forms": "^0.5.7",
+    "country-flag-icons": "^1.5.19",
     "jszip": "^3.10.1",
     "pinia": "^3.0.2",
     "qrcode": "^1.5.4",
     "qrcode.vue": "^3.6.0",
     "tw-elements": "^1.1.0",
     "vue": "^3.4.15",
+    "vue-circle-flags": "^1.0.9",
     "vue-i18n": "^11.1.1",
     "vue-router": "^4.2.5"
   },

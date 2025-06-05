@@ -38,8 +38,7 @@
                   <!-- German Relying Party -->
                   <a href="https://servicekonto.test.governikus-eid.de/eudi-mercury-testclient/start" target="_blank" class="border border-gray-300 rounded-lg p-4 hover:bg-gray-50 transition cursor-pointer">
                     <div class="flex items-center mb-2">
-                      <div class="w-6 h-4 overflow-hidden flex-shrink-0 mr-2 border border-gray-300" style="background: linear-gradient(to bottom, #000000 33%, #DD0000 33%, #DD0000 66%, #FFCE00 66%);">
-                      </div>
+                      <Icon icon="emojione:flag-for-germany" class="w-6 h-4 mr-2" />
                       <h4 class="font-medium text-gray-800">German Relying Party</h4>
                     </div>
                     <p class="text-gray-600 text-sm">German verification service</p>
@@ -48,8 +47,7 @@
                   <!-- Austrian Official Relying Party -->
                   <a href="https://pp-q.sdg-oop.gv.at/potential" target="_blank" class="border border-gray-300 rounded-lg p-4 hover:bg-gray-50 transition cursor-pointer">
                     <div class="flex items-center mb-2">
-                      <div class="w-6 h-4 overflow-hidden flex-shrink-0 mr-2 border border-gray-300" style="background: linear-gradient(to bottom, red 50%, white 50%);">
-                      </div>
+                      <Icon icon="emojione:flag-for-austria" class="w-6 h-4 mr-2" />
                       <h4 class="font-medium text-gray-800">Austrian Official Relying Party</h4>
                     </div>
                     <p class="text-gray-600 text-sm">Austrian official verification service</p>
@@ -58,8 +56,7 @@
                   <!-- Austrian Test Relying Party -->
                   <a href="https://apps.egiz.gv.at/customverifier/por.html" target="_blank" class="border border-gray-300 rounded-lg p-4 hover:bg-gray-50 transition cursor-pointer">
                     <div class="flex items-center mb-2">
-                      <div class="w-6 h-4 overflow-hidden flex-shrink-0 mr-2 border border-gray-300" style="background: linear-gradient(to bottom, red 50%, white 50%);">
-                      </div>
+                      <Icon icon="emojione:flag-for-austria" class="w-6 h-4 mr-2" />
                       <h4 class="font-medium text-gray-800">Austrian Test Relying Party</h4>
                     </div>
                     <p class="text-gray-600 text-sm">Austrian test verification service</p>
@@ -68,8 +65,7 @@
                   <!-- Slovenian Relying Party -->
                   <a href="https://sicas.setcce.si/idpw/login?policy=IDP-W&service=https%3A%2F%2Fsicas.gov.si%2Fbl%2FhandleIdpResponse%3FrelayState%3D29f7b1ba-caec-4536-8658-90231e2d1261&lang=si&spName=eUPRAVA&addAtt=emso%2Cdrzava%2Cnaslov%2Cdatum_roj" target="_blank" class="border border-gray-300 rounded-lg p-4 hover:bg-gray-50 transition cursor-pointer">
                     <div class="flex items-center mb-2">
-                      <div class="w-6 h-4 overflow-hidden flex-shrink-0 mr-2 border border-gray-300" style="background: linear-gradient(to bottom, white 33%, #005CE6 33%, #005CE6 66%, #ED1C24 66%);">
-                      </div>
+                      <Icon icon="emojione:flag-for-slovenia" class="w-6 h-4 mr-2" />
                       <h4 class="font-medium text-gray-800">Slovenian Relying Party</h4>
                     </div>
                     <p class="text-gray-600 text-sm">Slovenian verification service</p>
@@ -78,8 +74,7 @@
                   <!-- French Relying Party -->
                   <a href="https://api.playground.france-identite.gouv.fr/docaposte/console-icp/" target="_blank" class="border border-gray-300 rounded-lg p-4 hover:bg-gray-50 transition cursor-pointer">
                     <div class="flex items-center mb-2">
-                      <div class="w-6 h-4 overflow-hidden flex-shrink-0 mr-2 border border-gray-300" style="background: linear-gradient(to right, #002395 33%, white 33%, white 66%, #ED2939 66%);">
-                      </div>
+                      <Icon icon="emojione:flag-for-france" class="w-6 h-4 mr-2" />
                       <h4 class="font-medium text-gray-800">French Relying Party</h4>
                     </div>
                     <p class="text-gray-600 text-sm">French verification service</p>
@@ -88,8 +83,7 @@
                   <!-- Portuguese Relying Party -->
                   <a href="https://eudiwpotential-driving.demo.arubapec.it/uc1" target="_blank" class="border border-gray-300 rounded-lg p-4 hover:bg-gray-50 transition cursor-pointer">
                     <div class="flex items-center mb-2">
-                      <div class="w-6 h-4 overflow-hidden flex-shrink-0 mr-2 border border-gray-300" style="background: linear-gradient(to right, #006600 40%, #FF0000 40%, #FF0000 60%, #006600 60%);">
-                      </div>
+                      <Icon icon="emojione:flag-for-portugal" class="w-6 h-4 mr-2" />
                       <h4 class="font-medium text-gray-800">Portuguese Relying Party</h4>
                     </div>
                     <p class="text-gray-600 text-sm">Portuguese verification service</p>
@@ -98,8 +92,7 @@
                   <!-- Polish Relying Party -->
                   <a href="https://demo-relying-party.pit.lukasiewicz.gov.pl/" target="_blank" class="border border-gray-300 rounded-lg p-4 hover:bg-gray-50 transition cursor-pointer">
                     <div class="flex items-center mb-2">
-                      <div class="w-6 h-4 overflow-hidden flex-shrink-0 mr-2 border border-gray-300" style="background: linear-gradient(to bottom, white 50%, red 50%);">
-                      </div>
+                      <Icon icon="emojione:flag-for-poland" class="w-6 h-4 mr-2" />
                       <h4 class="font-medium text-gray-800">Polish Relying Party</h4>
                     </div>
                     <p class="text-gray-600 text-sm">Polish verification service</p>
@@ -146,6 +139,7 @@ import { useRoute } from 'vue-router'
 import NavigationBar from '@/components/NavigationBar.vue'
 import FlowLayout from '@/components/FlowLayout.vue'
 import { useFlowStore } from '@/stores/flowStore'
+import { Icon } from '@iconify/vue'
 
 // Get route and flow state
 const route = useRoute()
@@ -162,4 +156,14 @@ onMounted(() => {
     isInFlow.value = false
   }
 })
-</script> 
+</script>
+
+<style scoped>
+.flag-icon {
+  width: 24px;
+  height: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 2px;
+  object-fit: cover;
+}
+</style> 
