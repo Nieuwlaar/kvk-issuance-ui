@@ -117,6 +117,7 @@
               </router-link>
               
               <router-link 
+                @click.prevent="handleComplete"
                 to="/"
                 class="rounded-md bg-cyan-800 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-cyan-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-800"
               >
@@ -127,6 +128,26 @@
         </main>
       </div>
     </div>
+
+    <!-- Add Teleport for dialog -->
+    <Teleport to="body">
+      <div v-if="showSuccessDialog" class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity">
+        <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+          <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+            <div class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
+              <div class="text-center">
+                <h3 class="text-lg font-semibold leading-6 text-gray-900">Fantastic!</h3>
+                <div class="mt-2">
+                  <p class="text-sm text-gray-500">
+                    You will be redirected to the feedback form in {{ countdown }} seconds
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Teleport>
   </FlowLayout>
 </template>
 
@@ -142,6 +163,9 @@ import CountryFlag from 'vue-country-flag-next'
 const route = useRoute()
 const flowStore = useFlowStore()
 const isInFlow = ref(false)
+const showSuccessDialog = ref(false)
+const countdown = ref(5)
+const feedbackFormUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSewSCE3b2MdNk6sEmkG_g6RDPwk9uNDMq4hLAIDVVQFHXtjQw/viewform'
 
 onMounted(() => {
   // Check if we're in the PoR flow
@@ -157,6 +181,19 @@ onMounted(() => {
     isInFlow.value = false
   }
 })
+
+const handleComplete = () => {
+  showSuccessDialog.value = true
+  
+  const timer = setInterval(() => {
+    countdown.value--
+    
+    if (countdown.value <= 0) {
+      clearInterval(timer)
+      window.location.href = feedbackFormUrl
+    }
+  }, 1000)
+}
 </script>
 
 <style scoped>

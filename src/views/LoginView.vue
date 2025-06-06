@@ -40,7 +40,7 @@
                     to="/authorization?flow=issuance" 
                     class="flex items-center justify-center px-4 py-2 bg-cyan-800 rounded-lg hover:bg-cyan-700 w-full"
                   >
-                    <span class="flex-1 text-center font-medium text-white">Continue to Get Issuance</span>
+                    <span class="flex-1 text-center font-medium text-white">Continue</span>
                     <span aria-hidden="true" class="text-white ml-1">→</span>
                   </router-link>
                 </div>
