@@ -118,7 +118,6 @@
               
               <router-link 
                 @click.prevent="handleComplete"
-                to="/"
                 class="rounded-md bg-cyan-800 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-cyan-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-800"
               >
                 Complete Flow
