@@ -189,7 +189,8 @@ const handleComplete = () => {
     
     if (countdown.value <= 0) {
       clearInterval(timer)
-      window.location.href = feedbackFormUrl
+      window.open(feedbackFormUrl, '_blank')
+      showSuccessDialog.value = false
     }
   }, 1000)
 }
