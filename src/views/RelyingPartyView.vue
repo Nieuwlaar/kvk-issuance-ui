@@ -107,7 +107,7 @@
             </div>
             
             <!-- Flow Navigation -->
-            <div v-if="isInFlow" class="mt-8 flex justify-between">
+            <div class="mt-8 flex justify-between">
               <router-link 
                 to="/authorization?flow=issuance"
                 class="text-cyan-800 hover:text-cyan-900 font-medium flex items-center"
