@@ -105,27 +105,30 @@
                 </div>
               </div>
             </div>
-            
-            <!-- Flow Navigation -->
-            <div class="mt-8 flex justify-between">
-              <router-link 
-                to="/authorization?flow=issuance"
-                class="text-cyan-800 hover:text-cyan-900 font-medium flex items-center"
-              >
-                <span aria-hidden="true" class="mr-1">←</span>
-                Back to Attestations Issuance
-              </router-link>
-              
-              <router-link 
-                @click.prevent="handleComplete"
-                class="rounded-md bg-cyan-800 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-cyan-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-800"
-              >
-                Complete Flow
-              </router-link>
-            </div>
+          </div>
+
+          <!-- Flow Navigation -->
+          <div class="mt-8 flex justify-between">
+            <router-link 
+              to="/authorization?flow=issuance"
+              class="text-cyan-800 hover:text-cyan-900 font-medium flex items-center"
+            >
+              <span aria-hidden="true" class="mr-1">←</span>
+              Back to Attestations Issuance
+            </router-link>
           </div>
         </main>
       </div>
+    </div>
+
+    <!-- Complete Flow Button -->
+    <div class="fixed bottom-0 right-0 p-4">
+      <button 
+        @click="handleComplete"
+        class="rounded-md bg-cyan-800 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-cyan-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-800"
+      >
+        Complete Flow
+      </button>
     </div>
 
     <!-- Add Teleport for dialog -->
