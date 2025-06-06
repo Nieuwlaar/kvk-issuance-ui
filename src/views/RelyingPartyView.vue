@@ -31,7 +31,7 @@
                       <country-flag country="pl" size="small" class="mr-3" />
                       <h4 class="font-medium text-gray-800">Polish Relying Party</h4>
                     </div>
-                    <p class="text-gray-600 text-sm">Polish verification service</p>
+                    <p class="text-gray-600 text-sm">Lukasiewicz</p>
                   </a>
 
                   <!-- Slovenian Relying Party -->
@@ -40,7 +40,7 @@
                       <country-flag country="si" size="small" class="mr-3" />
                       <h4 class="font-medium text-gray-800">Slovenian Relying Party</h4>
                     </div>
-                    <p class="text-gray-600 text-sm">Slovenian verification service</p>
+                    <p class="text-gray-600 text-sm">Slovenian Government</p>
                   </a>
                 </div>
 
@@ -52,17 +52,17 @@
                       <country-flag country="at" size="small" class="mr-3" />
                       <h4 class="font-medium text-gray-800">Austrian Test Relying Party</h4>
                     </div>
-                    <p class="text-gray-600 text-sm">Austrian test verification service</p>
+                    <p class="text-gray-600 text-sm">A-SIT</p>
                   </a>
 
                   <!-- French Relying Party (commented out) -->
-                  <!-- <a href="https://api.playground.france-identite.gouv.fr/docaposte/console-icp/" target="_blank" class="border border-gray-300 rounded-lg p-4 hover:bg-gray-50 transition cursor-pointer">
+                  <a href="https://api.playground.france-identite.gouv.fr/docaposte/console-icp/" target="_blank" class="border border-gray-300 rounded-lg p-4 hover:bg-gray-50 transition cursor-pointer">
                     <div class="flex items-center mb-2">
                       <country-flag country="fr" size="small" class="mr-3" />
                       <h4 class="font-medium text-gray-800">French Relying Party</h4>
                     </div>
-                    <p class="text-gray-600 text-sm">French verification service</p>
-                  </a> -->
+                    <p class="text-gray-600 text-sm">Docaposte</p>
+                  </a>
                 </div>
 
                 <h3 class="font-medium text-gray-800 mb-3 mt-8">Work in Progress:</h3>
@@ -73,7 +73,7 @@
                       <country-flag country="de" size="small" class="mr-3" />
                       <h4 class="font-medium text-gray-800">German Relying Party</h4>
                     </div>
-                    <p class="text-gray-600 text-sm">German verification service</p>
+                    <p class="text-gray-600 text-sm">Governikus</p>
                   </a>
 
                   <!-- Austrian Official Relying Party -->
@@ -82,16 +82,25 @@
                       <country-flag country="at" size="small" class="mr-3" />
                       <h4 class="font-medium text-gray-800">Austrian Official Relying Party</h4>
                     </div>
-                    <p class="text-gray-600 text-sm">Austrian official verification service</p>
+                    <p class="text-gray-600 text-sm">Austrian Government</p>
+                  </a>
+
+                  <!-- Portuguese Relying Party -->
+                  <a href="https://google.com" target="_blank" class="border border-gray-300 rounded-lg p-4 hover:bg-gray-50 transition cursor-pointer">
+                    <div class="flex items-center mb-2">
+                      <country-flag country="pt" size="small" class="mr-3" />
+                      <h4 class="font-medium text-gray-800">Portuguese Relying Party</h4>
+                    </div>
+                    <p class="text-gray-600 text-sm">Portuguese Government</p>
                   </a>
 
                   <!-- Portuguese Relying Party -->
                   <a href="https://eudiwpotential-driving.demo.arubapec.it/uc1" target="_blank" class="border border-gray-300 rounded-lg p-4 hover:bg-gray-50 transition cursor-pointer">
                     <div class="flex items-center mb-2">
-                      <country-flag country="pt" size="small" class="mr-3" />
-                      <h4 class="font-medium text-gray-800">Portuguese Relying Party</h4>
+                      <country-flag country="it" size="small" class="mr-3" />
+                      <h4 class="font-medium text-gray-800">Italian Relying Party</h4>
                     </div>
-                    <p class="text-gray-600 text-sm">Portuguese verification service</p>
+                    <p class="text-gray-600 text-sm">Aruba</p>
                   </a>
                 </div>
               </div>
@@ -104,7 +113,7 @@
                 class="text-cyan-800 hover:text-cyan-900 font-medium flex items-center"
               >
                 <span aria-hidden="true" class="mr-1">←</span>
-                Back to PoR Issuance
+                Back to Attestations Issuance
               </router-link>
               
               <router-link 
