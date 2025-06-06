@@ -15,14 +15,13 @@
             <h2 class="text-xl font-semibold text-gray-900">Pilot with KVK Power of Representation</h2>
             <p class="mt-2 text-sm text-gray-600">Complete end-to-end flow demonstrating Power of Representation issuance and verification:</p>
             <ul class="mt-3 list-disc list-inside text-sm text-gray-600 space-y-1">
-              <li>Get a PID issued to your test wallet</li>
               <li>Authenticate to KVK using your PID</li>
               <li>Receive a Power of Representation credential</li>
               <li>Verify your PoR with relying parties</li>
             </ul>
           </div>
           <router-link 
-            to="/wallet?flow=por"
+            to="/login?flow=por"
             class="w-full inline-flex justify-center rounded-md bg-cyan-800 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-cyan-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-800"
           >
             Start Complete PoR Flow

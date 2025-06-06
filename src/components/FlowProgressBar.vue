@@ -58,12 +58,12 @@ const props = defineProps({
 const route = useRoute()
 
 const steps = computed(() => [
-  { 
-    name: 'Initialize', 
-    href: '/wallet', 
-    status: getStatus('wallet'),
-    icon: DevicePhoneMobileIcon
-  },
+  // { 
+  //   name: 'Initialize', 
+  //   href: '/wallet', 
+  //   status: getStatus('wallet'),
+  //   icon: DevicePhoneMobileIcon
+  // },
   { 
     name: 'Authenticate', 
     href: '/login', 
@@ -95,7 +95,7 @@ function getStatus(step) {
 }
 
 function isStepComplete(step) {
-  const stepOrder = ['wallet', 'login', 'authorization', 'relying-party']
+  const stepOrder = ['login', 'authorization', 'relying-party']
   const currentIndex = stepOrder.indexOf(props.currentStep)
   const stepIndex = stepOrder.indexOf(step)
   
