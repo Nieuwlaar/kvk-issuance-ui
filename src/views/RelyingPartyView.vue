@@ -109,7 +109,7 @@
             <!-- Flow Navigation -->
             <div v-if="isInFlow" class="mt-8 flex justify-between">
               <router-link 
-                to="/authorization?flow=por"
+                to="/authorization?flow=issuance"
                 class="text-cyan-800 hover:text-cyan-900 font-medium flex items-center"
               >
                 <span aria-hidden="true" class="mr-1">←</span>
@@ -146,6 +146,10 @@ const isInFlow = ref(false)
 onMounted(() => {
   // Check if we're in the PoR flow
   if (route.query.flow === 'por') {
+    isInFlow.value = true
+    flowStore.startFlow()
+    flowStore.setCurrentStep('relying-party')
+  } else if (route.query.flow === 'issuance') {
     isInFlow.value = true
     flowStore.startFlow()
     flowStore.setCurrentStep('relying-party')

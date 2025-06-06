@@ -41,7 +41,7 @@
             <!-- Continue Button for Flow -->
             <div v-if="isInFlow" class="mt-8 flex justify-end">
               <router-link 
-                to="/login?flow=por" 
+                to="/login?flow=issuance" 
                 class="rounded-md bg-cyan-800 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-cyan-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-800"
               >
                 Continue to Authentication
@@ -69,6 +69,10 @@ const isInFlow = ref(false)
 onMounted(() => {
   // Check if we're in the PoR flow
   if (route.query.flow === 'por') {
+    isInFlow.value = true
+    flowStore.startFlow()
+    flowStore.setCurrentStep('wallet')
+  } else if (route.query.flow === 'issuance') {
     isInFlow.value = true
     flowStore.startFlow()
     flowStore.setCurrentStep('wallet')

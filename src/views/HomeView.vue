@@ -28,6 +28,25 @@
           </router-link>
         </div>
         
+        <!-- KVK Issuance Pilot Flow -->
+        <div class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden p-6 mb-8">
+          <div class="mb-4">
+            <h2 class="text-xl font-semibold text-gray-900">Pilot with KVK issued attestations</h2>
+            <p class="mt-2 text-sm text-gray-600">Complete end-to-end flow demonstrating attestation issuance and verification:</p>
+            <ul class="mt-3 list-disc list-inside text-sm text-gray-600 space-y-1">
+              <li>Authenticate to KVK using your PID (mdoc)</li>
+              <li>Receive KVK attestations</li>
+              <li>Verify your attestations with relying parties</li>
+            </ul>
+          </div>
+          <router-link 
+            to="/login?flow=issuance"
+            class="w-full inline-flex justify-center rounded-md bg-cyan-800 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-cyan-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-800"
+          >
+            Start Complete Flow
+          </router-link>
+        </div>
+        
         <!-- Individual Components -->
         <div class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden p-6">
           <h2 class="text-lg font-semibold text-gray-900 mb-4">Individual Components</h2>

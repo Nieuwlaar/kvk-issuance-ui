@@ -37,10 +37,10 @@
                 <!-- Continue Button for Flow -->
                 <div v-if="isInFlow" class="px-6 pt-2 pb-6">
                   <router-link 
-                    to="/authorization?flow=por" 
+                    to="/authorization?flow=issuance" 
                     class="flex items-center justify-center px-4 py-2 bg-cyan-800 rounded-lg hover:bg-cyan-700 w-full"
                   >
-                    <span class="flex-1 text-center font-medium text-white">Continue to Get PoR</span>
+                    <span class="flex-1 text-center font-medium text-white">Continue to Get Issuance</span>
                     <span aria-hidden="true" class="text-white ml-1">→</span>
                   </router-link>
                 </div>
@@ -174,6 +174,10 @@ onMounted(() => {
   
   // Check if we're in the PoR flow
   if (route.query.flow === 'por') {
+    isInFlow.value = true
+    flowStore.startFlow()
+    flowStore.setCurrentStep('login')
+  } else if (route.query.flow === 'issuance') {
     isInFlow.value = true
     flowStore.startFlow()
     flowStore.setCurrentStep('login')

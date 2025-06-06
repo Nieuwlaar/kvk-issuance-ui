@@ -68,7 +68,7 @@
             <!-- Back button when in flow -->
             <router-link 
               v-if="isInFlow" 
-              to="/login?flow=por"
+              to="/login?flow=issuance"
               class="text-cyan-800 hover:text-cyan-900 font-medium flex items-center"
             >
               <span aria-hidden="true" class="mr-1">←</span>
@@ -78,7 +78,7 @@
             <!-- Continue button when in flow -->
             <router-link 
               v-if="isInFlow" 
-              to="/relying-party?flow=por"
+              to="/relying-party?flow=issuance"
               class="rounded-md bg-cyan-800 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-cyan-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-800"
             >
               Continue to Verification
@@ -454,7 +454,7 @@ const requestCompanyRegistration = async () => {
 
 onMounted(() => {
   // Check if we're in the PoR flow
-  if (route.query.flow === 'por') {
+  if (route.query.flow === 'issuance') {
     isInFlow.value = true
     flowStore.startFlow()
     flowStore.setCurrentStep('authorization')
