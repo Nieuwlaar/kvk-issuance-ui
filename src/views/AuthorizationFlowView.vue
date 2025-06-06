@@ -10,8 +10,8 @@
       <div class="py-10">
         <main class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <div class="text-center mb-8">
-            <h1 class="text-2xl font-bold text-gray-900 sm:text-3xl">Power of Representation Issuance</h1>
-            <p class="mt-2 text-lg text-gray-600">Get a Power of Representation credential for your organization</p>
+            <h1 class="text-2xl font-bold text-gray-900 sm:text-3xl">Attestations Issuance</h1>
+            <p class="mt-2 text-lg text-gray-600">Get a Power of Representation and Company Registration credential for your organization</p>
           </div>
           
           <!-- Company Certificates Section -->
@@ -38,7 +38,7 @@
           <div v-else-if="companyCertificates.length > 0" class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden mb-6">
             <div class="px-6 py-4 border-b border-gray-200">
               <h2 class="text-lg font-semibold text-gray-900">Your Organizations</h2>
-              <p class="text-sm text-gray-600">Select an organization to issue a Power of Representation</p>
+              <p class="text-sm text-gray-600">Select an organization to issue attestations</p>
             </div>
             <ul role="list" class="divide-y divide-gray-100">
               <li v-for="cert in companyCertificates" :key="cert.certificate.legal_person.legal_person_id" class="flex items-center justify-between gap-x-6 py-5 px-6">
@@ -55,7 +55,7 @@
                 </div>
                 <button 
                   @click="openDialog(cert.certificate.legal_person)"
-                  class="rounded-full bg-white px-3.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                  class="rounded-md bg-cyan-800 px-3.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-cyan-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-800"
                 >
                   Issue
                 </button>
