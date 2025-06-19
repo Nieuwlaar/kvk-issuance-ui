@@ -208,10 +208,10 @@ const companyRegistrationForm = ref({
   legal_person_identifier: '',
   legal_name: '',
   format: 'sd_jwt_vc',
-  activity_description: "The preparation and sale of Krabby Patties.",
-  admin_unit_L1: "Bikini Bottom",
-  company_activity: "5610",
-  company_contact_data: "+310201234567",
+  activity_description: "",
+  admin_unit_L1: "",
+  company_activity: "",
+  company_contact_data: "",
   company_status: "Active"
 })
 

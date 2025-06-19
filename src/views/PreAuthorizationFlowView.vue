@@ -120,12 +120,12 @@ const selectedFormat = ref('sd_jwt_vc') // Default format
 const refetchIntervalId = ref(null)
 
 const organizations = [
-  {
-    legal_person_name: 'The Krusty Krab',
-    attestation_type: 'Power of Representation',
-    imageUrl: TheKrustyKrab,
-    kvkNumber: '90000021',
-  },
+  // {
+  //   legal_person_name: 'The Krusty Krab',
+  //   attestation_type: 'Power of Representation',
+  //   imageUrl: TheKrustyKrab,
+  //   kvkNumber: '90000021',
+  // },
   // {
   //   legal_person_name: 'Duckburg Daily',
   //   attestation_type: 'Power of Representation',
